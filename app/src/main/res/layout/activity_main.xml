@@ -10,8 +10,17 @@
     tools:context="com.example.ahmed.tamrah.MainActivity">
 
 
+
+    <FrameLayout
+        android:orientation="vertical"
+        android:id="@+id/flContents"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></FrameLayout>
+
+
     <android.support.design.widget.NavigationView
         app:headerLayout="@layout/header"
+        android:id="@+id/nV"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -21,73 +30,6 @@
         android:layout_gravity="start">
     </android.support.design.widget.NavigationView>
 
-    <!--
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/main_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusableInTouchMode="true"
-        android:fitsSystemWindows="true">
-
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/activity_horizontal_margin"
-                android:text="@string/long_text" />
-        </android.support.v4.widget.NestedScrollView>
-
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark">
-
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-
-
-
-
-
-
-
-            <RelativeLayout
-                android:id="@+id/search_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/toolbar"
-                android:background="@color/colorPrimary"
-                android:padding="@dimen/activity_horizontal_margin">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:drawablePadding="22dp"
-                    android:drawableRight="@android:drawable/ic_menu_search"
-                    android:gravity="left|center"
-                    android:hint="Search for Tamr..."
-                    android:padding="10dp"
-                    android:textColorHint="@android:color/darker_gray" />
-            </RelativeLayout>
-
-        </android.support.design.widget.AppBarLayout>
-
-    </android.support.design.widget.CoordinatorLayout>
-
--->
 </android.support.v4.widget.DrawerLayout>
 
 
