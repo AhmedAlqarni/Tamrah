@@ -1,7 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ahmed.tamrah.AccountActivity">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        >
+
+        <TextView
+            android:layout_marginEnd="70dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tamrah"
+            android:textSize="22sp"
+            android:onClick="goToHome"
+            android:clickable="true"
+            android:textColor="@color/white"
+            android:gravity = "center"
+            android:id="@+id/toolbar_title" />
+
+    </android.support.v7.widget.Toolbar>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_below="@+id/toolBar"
     android:layout_height="match_parent"
     android:background="@color/light_brown"
     android:orientation="vertical"
@@ -306,3 +339,4 @@
     </ScrollView>
 
 </LinearLayout>
+</RelativeLayout>

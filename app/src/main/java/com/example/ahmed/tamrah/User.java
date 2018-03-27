@@ -71,6 +71,13 @@ public class User implements Serializable{
         isLoggedIn = false;
     }
 
+    public void setProfilePic(String profilePic) {
+        UID = Auth.fbAuth.getCurrentUser().getUid();
+        DatabaseReference DBRef = FirebaseDatabase.getInstance().getReference().child("User").child(UID);
+        DBRef.child("profileImage").setValue(profilePic);
+        this.profilePic = profilePic;
+    }
+
     public String getName() {
         return name;
     }
@@ -87,6 +94,8 @@ public class User implements Serializable{
         return phoneNum;
     }
 
+
+    //Created by Ahmed
     public String getProfilePic() {
         return profilePic;
     }

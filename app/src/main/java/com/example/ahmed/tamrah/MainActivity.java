@@ -65,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private Toolbar toolBar;
-    private User user;
+    static User user;
+    static CircleImageView userImg;
     private NavigationView nvDrawer;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private Intent intent;
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//Created by Khalid
+        //Created by Khalid
         user = (User) getIntent().getSerializableExtra("User");
         setResult(-1, null);
         user = new User();
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         View header = nvDrawer.getHeaderView(0);
         TextView username = (TextView) header.findViewById(R.id.user_name);
         TextView email = (TextView) header.findViewById(R.id.user_email);
-        CircleImageView userImg = (CircleImageView) header.findViewById(R.id.nav_profile_image);
+        userImg = (CircleImageView) header.findViewById(R.id.nav_profile_image);
         userImg.setVisibility(View.VISIBLE);
 
         if (user.isLoggedIn()) {

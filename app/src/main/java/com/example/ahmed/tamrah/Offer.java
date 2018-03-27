@@ -17,24 +17,27 @@ import java.util.Map;
 public class Offer implements Serializable{
     private String Title, Description, Type, mCity, Seller;
     private String Price, Rate, OID;
+    private String offerImage;
 
 
     public Offer() {}
 
-//    public Offer(String title, String type, String city, String price, String rate) {
+    //    public Offer(String title, String type, String city, String price, String rate) {
 //        setTitle(title);
 //        setType(type);
 //        setCity(city);
 //        setPrice(price);
 //        setRate(rate);
 //    }
-    public Offer(String title, String type, String city, String price, String rate,String mDesc) {
+    public Offer(String title, String type, String city, String price, String rate, String mDesc, String oImage) {
         setTitle(title);
         setType(type);
         setCity(city);
         setPrice(price);
         setRate(rate);
         setDesc(mDesc);
+        setOfferImage(oImage);
+
     }
 
 
@@ -103,6 +106,14 @@ public class Offer implements Serializable{
 
     public void setSellerUID(String SellerUID) {
         this.Seller = SellerUID;
+    }
+
+    public String getOfferImage() {
+        return offerImage;
+    }
+
+    public void setOfferImage(String offerImage) {
+        this.offerImage = offerImage;
     }
 
 //    public void setValues(Map<String,Object> offerValues) {

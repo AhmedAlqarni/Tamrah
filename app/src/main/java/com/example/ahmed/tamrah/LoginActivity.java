@@ -43,15 +43,21 @@ public class  LoginActivity extends AppCompatActivity{
         if(user==null)
             user = new User();
         setResult(-1, null);
+
+        //ToolBar
         toolBar = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolBar);
-
+        //BackButton toolbar
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         final EditText email = (EditText) findViewById(R.id.input_email);
         final EditText password = (EditText) findViewById(R.id.input_password);
         //for testing purpeses...
-        login("alnamlahk@gmail.com", "123456");
+        //login("alnamlahk@gmail.com", "123456");
         //login("s201351950@kfupm.edu.sa", "123456");
-        //login("s201342450@kfupm.edu.sa", "123456");
+        login("s201342450@kfupm.edu.sa", "123456");
         Button loginButton = (Button) findViewById(R.id.btn_login);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

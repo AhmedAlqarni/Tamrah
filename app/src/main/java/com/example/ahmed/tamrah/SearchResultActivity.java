@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.SearchView;
@@ -31,12 +33,23 @@ public class SearchResultActivity extends AppCompatActivity {
     private OffersAdapter mAdapter;//static by Khalid
     private DatabaseReference databaseReference ;
     private String query;
+    private Toolbar toolBar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
+
+        //ToolBar
+        toolBar = (Toolbar) findViewById(R.id.toolBar);
+        setSupportActionBar(toolBar);
+        //BackButton toolbar
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         final SearchView searchView = (android.widget.SearchView) findViewById(R.id.search_view);
         final Context context = this;
         searchView.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
@@ -88,6 +101,19 @@ public class SearchResultActivity extends AppCompatActivity {
         Log.i("44",query);
         firebaseOfferSearch(query);
 
+    }
+
+    //BackButton toolbar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()== android.R.id.home){
+            finish();
+        }
+        return super.onOptionsItemSelected( item);
+    }
+
+    public void goToHome(View view) {
+        finish();
     }
 
     public void firebaseOfferSearch(String query){

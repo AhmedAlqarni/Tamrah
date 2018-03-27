@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,6 +46,17 @@ public class SignupActivity extends AppCompatActivity {
     private User user;
     private FirebaseUser FBUser;
 
+
+    //BackButton toolbar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()== android.R.id.home){
+            finish();
+        }
+        return super.onOptionsItemSelected( item);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +64,16 @@ public class SignupActivity extends AppCompatActivity {
         //?????
         user = (User) getIntent().getSerializableExtra("User");
         setResult(-1, null);
+
+
         //ToolBar
         toolBar = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolBar);
+        //BackButton toolbar
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         buttonRegister = (Button) findViewById(R.id.btn_signup);
         editTextEmail = (EditText) findViewById(R.id.input_email);

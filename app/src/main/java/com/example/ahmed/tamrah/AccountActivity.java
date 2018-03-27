@@ -5,11 +5,22 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
+import com.google.android.gms.tasks.OnSuccessListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import java.io.ByteArrayOutputStream;
+import java.net.URI;
+import java.util.HashMap;
+
 import android.media.ExifInterface;
 import android.media.Image;
 import android.net.Uri;
@@ -46,20 +57,36 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.provider.MediaStore.Images.Media.getBitmap;
+import static com.example.ahmed.tamrah.MainActivity.userImg;
 
 
 public class AccountActivity extends AppCompatActivity {
-        private static final int SELECTED_PICTURE = 1;
-        private User user;
+
+    private static final int SELECTED_PICTURE = 1;
+    //private User user;
+    private StorageReference mStorage;
+    private Toolbar toolBar;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
         setResult(-1, null);
+        mStorage = FirebaseStorage.getInstance().getReference();
         String UID = getIntent().getStringExtra("UID");
+
+        //ToolBar
+        toolBar = (Toolbar) findViewById(R.id.toolBar);
+        setSupportActionBar(toolBar);
+        //BackButton toolbar
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         if(UID.equals("myProfile")) {
-            user = (User) getIntent().getSerializableExtra("User");
+            MainActivity.user = (User) getIntent().getSerializableExtra("User");
             LinearLayout reviewSection = (LinearLayout) findViewById(R.id.AddReviewSection);
             LinearLayout msgBtn = (LinearLayout) findViewById(R.id.MessgeBtnLayout);
             reviewSection.removeAllViewsInLayout();
@@ -71,12 +98,13 @@ public class AccountActivity extends AppCompatActivity {
             picChanger.hide();
             LinearLayout editAccount = (LinearLayout) findViewById(R.id.EditAccountLayout);
             editAccount.removeAllViewsInLayout();
-            user = new User();
+            MainActivity.user = new User();
             fetchProfile(UID);
             addRateSpinerValues();
         }
 
     }
+
 
 
     private void fetchProfile(final String UID) {
@@ -88,7 +116,7 @@ public class AccountActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 dataSnapshot = dataSnapshot.child(UID);
-                user.setProfileValues((Map<String, Object>)dataSnapshot.getValue());
+                MainActivity.user.setProfileValues((Map<String, Object>)dataSnapshot.getValue());
                 progressDialog.dismiss();
                 updateContext();
             }
@@ -106,14 +134,14 @@ public class AccountActivity extends AppCompatActivity {
         TextView phoneView = (TextView) findViewById(R.id.Phone);
         CircleImageView pictureView = (CircleImageView) findViewById(R.id.profile_image);
 
-        usernameView.setText(user.getName());
-        regionView.setText(user.getRegion());
-        descriptionView.setText(user.getDescription());
-        phoneView.setText(user.getPhoneNum());
-        if(!user.getProfilePic().equals(""))
-            pictureView.setImageDrawable(new ImageFetcher().fetch(user.getProfilePic()));
+        usernameView.setText(MainActivity.user.getName());
+        regionView.setText(MainActivity.user.getRegion());
+        descriptionView.setText(MainActivity.user.getDescription());
+        phoneView.setText(MainActivity.user.getPhoneNum());
+        if(!MainActivity.user.getProfilePic().equals(""))
+            pictureView.setImageDrawable(new ImageFetcher().fetch(MainActivity.user.getProfilePic()));
     }
-//Button Handler
+    //Button Handler
     //for selecting profile image in the Profile page
     public void changeProfilePictureBtn(View view) {
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -121,7 +149,6 @@ public class AccountActivity extends AppCompatActivity {
 
 
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -136,14 +163,42 @@ public class AccountActivity extends AppCompatActivity {
                 //profile_image
                 Bitmap loadedBitmap = getCorrectlyOrientedImage(this, uri,1000);
                 cV.setImageBitmap(loadedBitmap);
+                MainActivity.userImg.setImageBitmap(loadedBitmap);
                 //cV.setImageURI(uri);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                loadedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+                byte[] data2 = baos.toByteArray();
+
+                //firebase upload
+                final StorageReference filepath = mStorage.child("Photos").child(uri.getLastPathSegment());
+                filepath.putBytes(data2).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(AccountActivity.this, "Upload Done", Toast.LENGTH_LONG);
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        //                       Log.i("X ", String.valueOf(downloadUrl));
+                        DatabaseReference DBRef = FirebaseDatabase.getInstance().getReference().child("User")
+                                .child(Auth.fbAuth.getUid()).child("profileImage");
+                        DBRef.setValue(String.valueOf(downloadUrl));
+                        MainActivity.user.setProfilePic(String.valueOf(downloadUrl));
+                    }
+                });
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-
+    //BackButton toolbar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()== android.R.id.home){
+            finish();
+        }
+        return super.onOptionsItemSelected( item);
+    }
 
     //gets image oreintation  before setting it as profile image
     public static int getOrientation(Context context, Uri photoUri) {
@@ -248,6 +303,12 @@ public class AccountActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
 
 
+    }
+
+    //Button Handler
+    //This is to make the app title clickable
+    public void goToHome(View view) {
+        finish();
     }
 
 

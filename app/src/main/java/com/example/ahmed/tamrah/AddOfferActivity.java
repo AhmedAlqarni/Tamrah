@@ -1,8 +1,6 @@
 package com.example.ahmed.tamrah;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -11,23 +9,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,11 +38,15 @@ public class AddOfferActivity extends AppCompatActivity {
     private Offer offer;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int SELECTED_PICTURE = 1;
+    private StorageReference mStorage;
+    private Uri ImagedownloadUrl ; //offer image download link
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_offer);
+        mStorage = FirebaseStorage.getInstance().getReference();
 
         final TextInputEditText title = (TextInputEditText) findViewById(R.id.OfferTitleInput);
         final EditText descView = (EditText) findViewById(R.id.OfferDiscInput);
@@ -77,7 +79,7 @@ public class AddOfferActivity extends AppCompatActivity {
             public void onClick(View view) {
                 offer = new Offer(title.getText().toString(), typeView.getText().toString(),
                         citySpinner.getSelectedItem().toString(), (priceView.getText().toString()),
-                        "-1", descView.getText().toString());
+                        "-1", descView.getText().toString(),String.valueOf(ImagedownloadUrl));
                 publish();
             }
         });
@@ -92,13 +94,29 @@ public class AddOfferActivity extends AppCompatActivity {
         //For reading a picture from the deviceif(requestCode ==   SELECTED_PICTURE && data != null) {
         Uri uri = data.getData();
         // Show the Selected Image onImageView ImageView cV = (ImageView) findViewById(R.id.imageViewAdding);
-        ImageView cV = (ImageView) findViewById(R.id.imageViewAdding);
+        ImageView iV = (ImageView) findViewById(R.id.imageViewAdding);
         getOrientation(this, uri);
         try {
-            //profile_image
+            //Offer Image
             Bitmap loadedBitmap = getCorrectlyOrientedImage(this, uri,1000);
-            cV.setImageBitmap(loadedBitmap);
+            iV.setImageBitmap(loadedBitmap);
             //cV.setImageURI(uri);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            loadedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+            byte[] data2 = baos.toByteArray();
+
+            //firebase add to storage
+            final StorageReference filepath = mStorage.child("OfferPhotos").child(uri.getLastPathSegment());
+            filepath.putBytes(data2).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(AddOfferActivity.this, "Image uplaod is Done", Toast.LENGTH_LONG);
+                    ImagedownloadUrl = taskSnapshot.getDownloadUrl();
+                }
+            });
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -131,6 +149,7 @@ public class AddOfferActivity extends AppCompatActivity {
         offerPost.put("Type", offer.getType());
         offerPost.put("Rate", offer.getRate());
         offerPost.put("OID", "");
+        offerPost.put("OfferImage", offer.getOfferImage());
 
         //FBofferNode.setValue(offerPost);
         FBofferNode = FBofferNode.child(FBofferNode.push().getKey());
