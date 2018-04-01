@@ -129,8 +129,6 @@ public class SearchResultActivity extends AppCompatActivity {
                 firebaseQuerySearch) {
             @Override
             protected void populateViewHolder(MyViewHolder1 viewHolder, Offer model, int position) {
-                Log.i("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-                        model.getDescription());
                 viewHolder.setDetails(model.getTitle(), model.getType(), model.getPrice(),
                         model.getCity(), model.getRate(), model.getOfferImage());
                 offerList.add(model);
