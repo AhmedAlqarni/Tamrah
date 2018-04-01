@@ -66,6 +66,7 @@ public class AccountActivity extends AppCompatActivity {
     //private User user;
     private StorageReference mStorage;
     private Toolbar toolBar;
+    User user;
 
 
     @Override
@@ -86,7 +87,7 @@ public class AccountActivity extends AppCompatActivity {
         }
 
         if(UID.equals("myProfile")) {
-            MainActivity.user = (User) getIntent().getSerializableExtra("User");
+            user = (User) getIntent().getSerializableExtra("User");
             LinearLayout reviewSection = (LinearLayout) findViewById(R.id.AddReviewSection);
             LinearLayout msgBtn = (LinearLayout) findViewById(R.id.MessgeBtnLayout);
             reviewSection.removeAllViewsInLayout();
@@ -98,7 +99,7 @@ public class AccountActivity extends AppCompatActivity {
             picChanger.hide();
             LinearLayout editAccount = (LinearLayout) findViewById(R.id.EditAccountLayout);
             editAccount.removeAllViewsInLayout();
-            MainActivity.user = new User();
+            user = new User();
             fetchProfile(UID);
             addRateSpinerValues();
         }
@@ -116,7 +117,7 @@ public class AccountActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 dataSnapshot = dataSnapshot.child(UID);
-                MainActivity.user.setProfileValues((Map<String, Object>)dataSnapshot.getValue());
+                user.setProfileValues((Map<String, Object>)dataSnapshot.getValue());
                 progressDialog.dismiss();
                 updateContext();
             }
@@ -134,12 +135,12 @@ public class AccountActivity extends AppCompatActivity {
         TextView phoneView = (TextView) findViewById(R.id.Phone);
         CircleImageView pictureView = (CircleImageView) findViewById(R.id.profile_image);
 
-        usernameView.setText(MainActivity.user.getName());
-        regionView.setText(MainActivity.user.getRegion());
-        descriptionView.setText(MainActivity.user.getDescription());
-        phoneView.setText(MainActivity.user.getPhoneNum());
-        if(!MainActivity.user.getProfilePic().equals(""))
-            pictureView.setImageDrawable(new ImageFetcher().fetch(MainActivity.user.getProfilePic()));
+        usernameView.setText(user.getName());
+        regionView.setText(user.getRegion());
+        descriptionView.setText(user.getDescription());
+        phoneView.setText(user.getPhoneNum());
+        if(!user.getProfilePic().equals(""))
+            pictureView.setImageDrawable(new ImageFetcher().fetch(user.getProfilePic()));
     }
     //Button Handler
     //for selecting profile image in the Profile page
@@ -152,6 +153,12 @@ public class AccountActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 0){
+            if(resultCode != -1) return;
+            user = (User) data.getSerializableExtra("User");
+            updateContext();
+        }
+
         super.onActivityResult(requestCode, resultCode, data);
         //For reading a picture from the device
         if (requestCode == SELECTED_PICTURE && data != null) {
@@ -181,7 +188,7 @@ public class AccountActivity extends AppCompatActivity {
                         DatabaseReference DBRef = FirebaseDatabase.getInstance().getReference().child("User")
                                 .child(Auth.fbAuth.getUid()).child("profileImage");
                         DBRef.setValue(String.valueOf(downloadUrl));
-                        MainActivity.user.setProfilePic(String.valueOf(downloadUrl));
+                        user.setProfilePic(String.valueOf(downloadUrl));
                     }
                 });
 
@@ -282,8 +289,9 @@ public class AccountActivity extends AppCompatActivity {
     //Button Handler
     //this is for the button in profile page "Edit Account"
     public void goToAccountSettings(View view) {
-        startActivity( new Intent(this,AccountSettingsActivity.class));
-    }
+        Intent intent = new Intent(this, AccountSettingsActivity.class);
+        intent.putExtra("User", user);
+        startActivityForResult(intent, 0);    }
 
     //to add all rating 1...5 spinner values
     public void addRateSpinerValues(){
@@ -310,9 +318,5 @@ public class AccountActivity extends AppCompatActivity {
     public void goToHome(View view) {
         finish();
     }
-
-
-
-
 
 }

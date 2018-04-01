@@ -234,10 +234,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MessagesListActivity.class));
                 return;
 
-            case R.id.SearchResultPage:
-                fragmentClass = SearchResultsFrag.class;
-                break;
-
             default:
                 fragmentClass = HomeFrag.class;
         }

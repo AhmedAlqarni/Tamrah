@@ -66,6 +66,7 @@ public class User implements Serializable{
         phoneNum = "";
         profilePic = "";
         address = "";
+        email = "";
         rate = 0;
         isSeller = false;
         isLoggedIn = false;
@@ -101,7 +102,6 @@ public class User implements Serializable{
     }
 
     public String getEmail() {
-        Log.i("",this.email);
         return email;
     }
 
@@ -141,23 +141,6 @@ public class User implements Serializable{
         DatabaseReference DBRef = FirebaseDatabase.getInstance().getReference().child("User").child(UID);
         DBRef.child("description").setValue(bio);
         this.description = bio;
-    }
-
-    //Created by Khalid ...
-    public void setEmail(String email){
-        UID = Auth.fbAuth.getCurrentUser().getUid();
-        DatabaseReference DBRef = FirebaseDatabase.getInstance().getReference().child("User").child(UID);
-        DBRef.child("email").setValue(email);
-
-        Auth.fbAuth.getCurrentUser().sendEmailVerification()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "Email sent.");
-                        }
-                    }
-                });
     }
 
     public void loggedIn(boolean isLoggedIn){this.isLoggedIn = isLoggedIn;}

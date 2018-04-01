@@ -12,14 +12,13 @@
     android:orientation="horizontal"
     android:onClick="goToOffer">
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/offerImg"
         android:layout_width="164dp"
         android:layout_height="164dp"
-        android:layout_weight="1"
-        android:onClick="goToOffer"
-        android:padding="2dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/ajuah" />
+        android:padding="1dp"
+        android:src="@drawable/ajuah"
+        app:civ_border_color="@color/white" />
 
 
     <RelativeLayout

@@ -120,14 +120,6 @@ public class AddOfferActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        //for the Camera App>>>
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            //mImageView.setImageBitmap(imageBitmap); Image result
-        }
-
     }
 
 
@@ -144,7 +136,7 @@ public class AddOfferActivity extends AppCompatActivity {
         Map offerPost = new HashMap();
         offerPost.put("Seller", Auth.fbAuth.getUid()); //STUB
         offerPost.put("Title", offer.getTitle());
-        offerPost.put("Description", offer.getDesc());
+        offerPost.put("Description", offer.getDescription());
         offerPost.put("Price", offer.getPrice());
         offerPost.put("Type", offer.getType());
         offerPost.put("Rate", offer.getRate());
@@ -156,7 +148,6 @@ public class AddOfferActivity extends AppCompatActivity {
         FBofferNode.setValue(offerPost);
         String OID = FBofferNode.getKey();
 
-        Log.i("X", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX " + OID);
         FBofferNode = FirebaseDatabase.getInstance().getReference().child("Offer").child(OID).child("OID");
         FBofferNode.setValue(OID);
 

@@ -1,46 +1,27 @@
 package com.example.ahmed.tamrah;
 
-import android.util.Log;
-
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.io.Serializable;
-import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Warsh on 3/7/2018.
  */
 
 public class Offer implements Serializable{
-    private String Title, Description, Type, mCity, Seller;
-    private String Price, Rate, OID;
-    private String offerImage;
+    private String Title, Description, Type, mCity, Seller, Price, Rate, OID, OfferImage;
 
 
     public Offer() {}
 
-    //    public Offer(String title, String type, String city, String price, String rate) {
-//        setTitle(title);
-//        setType(type);
-//        setCity(city);
-//        setPrice(price);
-//        setRate(rate);
-//    }
     public Offer(String title, String type, String city, String price, String rate, String mDesc, String oImage) {
         setTitle(title);
         setType(type);
         setCity(city);
         setPrice(price);
         setRate(rate);
-        setDesc(mDesc);
+        setDescription(mDesc);
         setOfferImage(oImage);
 
     }
-
-
 
     //Setters & Getters:
     public String getTitle() {
@@ -92,11 +73,11 @@ public class Offer implements Serializable{
         this.Rate = rate;
     }
 
-    public String getDesc() {
+    public String getDescription() {
         return Description;
     }
 
-    public void setDesc(String Desc) {
+    public void setDescription(String Desc) {
         this.Description = Desc;
     }
 
@@ -109,11 +90,11 @@ public class Offer implements Serializable{
     }
 
     public String getOfferImage() {
-        return offerImage;
+        return OfferImage;
     }
 
     public void setOfferImage(String offerImage) {
-        this.offerImage = offerImage;
+        this.OfferImage = offerImage;
     }
 
 //    public void setValues(Map<String,Object> offerValues) {

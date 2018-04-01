@@ -57,7 +57,6 @@ public class  LoginActivity extends AppCompatActivity{
         //for testing purpeses...
         //login("alnamlahk@gmail.com", "123456");
         //login("s201351950@kfupm.edu.sa", "123456");
-        login("s201342450@kfupm.edu.sa", "123456");
         Button loginButton = (Button) findViewById(R.id.btn_login);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,7 +126,7 @@ public class  LoginActivity extends AppCompatActivity{
                 user.setProfileValues((Map<String, Object>)dataSnapshot.getValue());
                 Intent intent = new Intent();
                 intent.putExtra("User",  user);
-                setResult(2, intent);
+                setResult(0, intent);
                 progressDialog.dismiss();
                 Toast.makeText(context, "Welcome Back, " + user.getName() + " \ud83d\ude09", Toast.LENGTH_LONG).show();
                 finish();

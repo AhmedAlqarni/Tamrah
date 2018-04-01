@@ -14,6 +14,7 @@ import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,8 @@ import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SearchResultActivity extends AppCompatActivity {
 
@@ -117,12 +120,7 @@ public class SearchResultActivity extends AppCompatActivity {
     }
 
     public void firebaseOfferSearch(String query){
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage("Retrieving search results ... MotherFucker xD");
-        pd.show();
         Query firebaseQuerySearch = databaseReference.orderByChild("Type").startAt(query).endAt(query+"\uf8ff");
-        Log.i("asasasasasasasasasasasas",firebaseQuerySearch.toString());
-
 
         FirebaseRecyclerAdapter<Offer,MyViewHolder1> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Offer, MyViewHolder1>(
                 Offer.class,
@@ -131,14 +129,11 @@ public class SearchResultActivity extends AppCompatActivity {
                 firebaseQuerySearch) {
             @Override
             protected void populateViewHolder(MyViewHolder1 viewHolder, Offer model, int position) {
-                //Log.i("", model.getType());
+                Log.i("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                        model.getDescription());
                 viewHolder.setDetails(model.getTitle(), model.getType(), model.getPrice(),
-                        model.getCity(), model.getRate());
+                        model.getCity(), model.getRate(), model.getOfferImage());
                 offerList.add(model);
-                Log.i("","title is:   "+model.getTitle());
-                Log.i("","Desc is:   "+model.getDesc());
-
-
             }
 
 //            @Override
@@ -146,15 +141,12 @@ public class SearchResultActivity extends AppCompatActivity {
 //                super.onBindViewHolder(viewHolder, position);
 //            }
         };
-        pd.dismiss();
         recyclerView.setAdapter(firebaseRecyclerAdapter);
     }
 
     public static class MyViewHolder1 extends RecyclerView.ViewHolder {
         public TextView title, type, city, price, rate;
         private View view;
-
-
 
         public MyViewHolder1(View view) {
             super(view);
@@ -171,8 +163,9 @@ public class SearchResultActivity extends AppCompatActivity {
         }
 
         public void setDetails(String title, String type, String price, String city,
-                               String rate){
+                               String rate, String imgURL){
 //            Log.i("38",type);
+            android.support.v7.widget.AppCompatImageView imgView = (android.support.v7.widget.AppCompatImageView) view.findViewById(R.id.offerImg);
             TextView textViewTitle = (TextView) view.findViewById(R.id.OfferTitle);
             TextView textViewType = (TextView)view.findViewById(R.id.TamrahType);
             TextView textViewPrice = (TextView)view.findViewById(R.id.OfferPrice);
@@ -188,6 +181,8 @@ public class SearchResultActivity extends AppCompatActivity {
             textViewPrice.setText(price+"");
             textViewCity.setText(city);
             textViewRate.setText(rate+"");
+            if(!imgURL.equals(""))
+                imgView.setImageDrawable(new ImageFetcher().fetch(imgURL));
             //textViewOID.setText()
 
         }

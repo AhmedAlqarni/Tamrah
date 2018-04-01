@@ -55,7 +55,7 @@ public class OfferActivity extends AppCompatActivity {
         city.setText(offer.getCity());
         type.setText(offer.getType());
         price.setText(offer.getPrice() + " S.R.");
-        desc.setText(offer.getDesc());
+        desc.setText(offer.getDescription());
         //Log.i("the description is:",offer.getDesc());
         if(offer.getRate().equals("-1"))
             rate.setText("N\\A");
