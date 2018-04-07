@@ -41,6 +41,7 @@ import static android.content.ContentValues.TAG;
  */
 
 public class User implements Serializable{
+
     private String UID;
     private String name;
     private String region;
@@ -107,6 +108,10 @@ public class User implements Serializable{
 
     public String getAddress(){ return address; }
 
+    public String getUID() {
+        return UID;
+    }
+
     public void setPhoneNum(String phoneNum) {
         UID = Auth.fbAuth.getCurrentUser().getUid();
         DatabaseReference DBRef = FirebaseDatabase.getInstance().getReference().child("User").child(UID);
@@ -162,6 +167,7 @@ public class User implements Serializable{
         isSeller = Boolean.parseBoolean(profileValues.get("isSeller").toString());
         profilePic = profileValues.get("profileImage").toString();
         email = profileValues.get("email").toString();
+        UID = Auth.fbAuth.getUid();
 
     }
 

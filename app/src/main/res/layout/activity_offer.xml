@@ -69,8 +69,7 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/ajuah" />
+                        android:scaleType="fitXY" />
                 </RelativeLayout>
 
                 <TextView
@@ -81,7 +80,6 @@
                     android:layout_below="@+id/Imagle_Layout"
                     android:layout_marginStart="11dp"
                     android:layout_marginTop="12dp"
-                    android:text="Best discounted Ajuah in Jeddah."
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -116,7 +114,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@+id/OfferTitle"
                     android:layout_below="@+id/OfferRating"
-                    android:text="Makkah City"
                     android:textSize="18sp" />
 
                 <TextView
@@ -128,7 +125,6 @@
                     android:background="@color/colorPrimary"
                     android:padding="4dp"
                     android:radius="10dp"
-                    android:text="Ajuah"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
@@ -138,7 +134,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@+id/Description"
                     android:layout_below="@+id/Description"
-                    android:text="35 SAR"
                     android:textColor="@android:color/holo_red_dark"
                     android:textSize="24sp" />
 
@@ -149,7 +144,6 @@
                     android:layout_alignStart="@+id/City"
                     android:layout_below="@+id/TamrahTypeOfferPage"
                     android:paddingRight="5dp"
-                    android:text="X"
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />
 
@@ -207,6 +201,7 @@
 
 
             <RelativeLayout
+                android:onClick="goToUserProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/fs"
@@ -230,7 +225,6 @@
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/relativeLayout"
                     android:padding="5dp"
-                    android:src="@drawable/ahmed_photo"
                     app:civ_border_color="@color/white"
                     app:civ_border_width="3dp" />
 
@@ -241,9 +235,9 @@
                     android:layout_above="@+id/textView4OfferPage"
                     android:layout_marginStart="11dp"
                     android:layout_toEndOf="@+id/profile_imageOfferPage"
-                    android:text="Ahmed Alqarni"
                     android:textColor="@android:color/black"
-                    android:textSize="30dp" />
+                    android:textSize="18sp"
+                    />
 
                 <TextView
                     android:id="@+id/SellerrRating"
@@ -274,7 +268,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@+id/OfferTitleOfferPage"
                     android:layout_below="@+id/SellerrRating"
-                    android:text="+9665444444444"
                     android:textColor="@android:color/holo_blue_dark"
                     android:textSize="18sp" />
 
@@ -282,6 +275,7 @@
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/offerAddReview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
@@ -303,6 +297,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="18dp"
                 android:background="@color/white"
+                android:id="@+id/offerReviewPanel"
                 android:minHeight="150dp">
 
 

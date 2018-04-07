@@ -81,11 +81,11 @@ public class Offer implements Serializable{
         this.Description = Desc;
     }
 
-    public String getSellerUID() {
+    public String getSeller() {
         return Seller;
     }
 
-    public void setSellerUID(String SellerUID) {
+    public void setSeller(String SellerUID) {
         this.Seller = SellerUID;
     }
 

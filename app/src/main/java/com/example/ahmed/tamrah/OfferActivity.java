@@ -1,15 +1,18 @@
 package com.example.ahmed.tamrah;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,9 +26,12 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class OfferActivity extends AppCompatActivity {
 
     private Offer offer;
+    private User seller;
     private Toolbar toolBar;
     //private TextView
 //
@@ -42,16 +48,10 @@ public class OfferActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        seller = new User();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offer);
         offer = (Offer) getIntent().getSerializableExtra("Offer");
-        TextView title = (TextView) findViewById(R.id.OfferTitle);
-        TextView city = (TextView) findViewById(R.id.City);
-        TextView type = (TextView) findViewById(R.id.TamrahTypeOfferPage);
-        TextView price = (TextView) findViewById(R.id.Phone);
-        TextView desc = (TextView) findViewById(R.id.Description);
-        TextView rate = (TextView) findViewById(R.id.OfferRating);
-        ImageView offerImage = (ImageView) findViewById(R.id.Offer_Image);
 
         //ToolBar
         toolBar = (Toolbar) findViewById(R.id.toolBar);
@@ -61,21 +61,7 @@ public class OfferActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-        offerImage.setImageDrawable(LoadImageFromWebOperations(offer.getOfferImage()));
-        title.setText(offer.getTitle());
-        city.setText(offer.getCity());
-        type.setText(offer.getType());
-        price.setText(offer.getPrice() + " S.R.");
-        desc.setText(offer.getDescription());
-        //Log.i("the description is:",offer.getDesc());
-        if(offer.getRate().equals("-1"))
-            rate.setText("N\\A");
-        else
-            rate.setText(offer.getRate());
-
-        //OfferTitle.setText(offer.getTitle());
-
+        fetchProfile(offer.getSeller());
     }
 
     //BackButton toolbar
@@ -87,28 +73,79 @@ public class OfferActivity extends AppCompatActivity {
         return super.onOptionsItemSelected( item);
     }
 
-    private void fetchOffer(final String OID) {
-        /*DatabaseReference DBRef = FirebaseDatabase.getInstance().getReference("Offer");
+    private void fetchProfile(final String UID) {
+        if(MainActivity.user.getUID().equals(UID)) {
+            updateContext();
+            return;
+        }
+        DatabaseReference DBRef = FirebaseDatabase.getInstance().getReference("User");
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Retrieving Offer ...");
         progressDialog.show();
         DBRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                dataSnapshot = dataSnapshot.child(OID); //????
-                //offer.setValues((Map<String, Object>)dataSnapshot.getValue());
-                Map<String,Object> map = (Map<String,Object>)dataSnapshot.getValue();
-                OfferTitle = (TextView) findViewById(R.id.OfferTitle);
-                OfferTitle.setText((String) map.get("Title"));;
+                dataSnapshot = dataSnapshot.child(UID);
+                seller.setProfileValues((Map<String, Object>)dataSnapshot.getValue());
                 progressDialog.dismiss();
-                //updateContext();???
+                updateContext();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });*/
+        });
     }
+
+    private void updateContext() {
+        //Offer-Specific Context
+        TextView title = (TextView) findViewById(R.id.OfferTitle);
+        TextView city = (TextView) findViewById(R.id.City);
+        TextView type = (TextView) findViewById(R.id.TamrahTypeOfferPage);
+        TextView price = (TextView) findViewById(R.id.Phone);
+        TextView desc = (TextView) findViewById(R.id.Description);
+        TextView rate = (TextView) findViewById(R.id.OfferRating);
+        ImageView offerImage = (ImageView) findViewById(R.id.Offer_Image);
+
+        offerImage.setImageDrawable(LoadImageFromWebOperations(offer.getOfferImage()));
+        title.setText(offer.getTitle());
+        city.setText(offer.getCity());
+        type.setText(offer.getType());
+        price.setText(offer.getPrice() + " S.R.");
+        desc.setText(offer.getDescription());
+        if(offer.getRate().equals("-1")) {
+            rate.setText("N\\A");
+            rate.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        }
+        else
+            rate.setText(offer.getRate());
+
+        //Seller-specific Context
+        ((TextView) findViewById(R.id.OfferTitleOfferPage)).setText(seller.getName());
+        ((TextView) findViewById(R.id.textView4OfferPage)).setText(seller.getPhoneNum());
+        ((CircleImageView) findViewById(R.id.profile_imageOfferPage)).setImageDrawable(new ImageFetcher().fetch(seller.getProfilePic()));
+        setViewBasedOnUser();
+
+    }
+
+
+    private void setViewBasedOnUser() {
+        if(MainActivity.user.getUID().equals(offer.getSeller())){
+            findViewById(R.id.offerReviewPanel).setVisibility(View.INVISIBLE);
+            findViewById(R.id.offerAddReview).setVisibility(View.INVISIBLE);
+            findViewById(R.id.AddOfferToCart).setVisibility(View.INVISIBLE);
+            ((Button) findViewById(R.id.AddOfferToCart)).setHeight(0);
+            findViewById(R.id.QuantitiyKG).setVisibility(View.INVISIBLE);
+        }
+
+        else{
+            findViewById(R.id.EditOffer).setVisibility(View.INVISIBLE);
+            ((Button) findViewById(R.id.EditOffer)).setHeight(0);
+
+        }
+    }
+
+
     //Button Handler
     //This is to make the app title clickable
     public void goToHome(View view) {
@@ -124,6 +161,12 @@ public class OfferActivity extends AppCompatActivity {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public void goToUserProfile(View view){
+        Intent intent = new Intent(this, AccountActivity.class);
+        intent.putExtra("UID", seller.getUID());
+        startActivity(intent);
     }
 
 }

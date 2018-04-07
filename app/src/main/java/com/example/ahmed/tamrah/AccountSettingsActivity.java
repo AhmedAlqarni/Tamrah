@@ -147,9 +147,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful())
-                            Log.i("i", "Updated Successfully XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+                            Log.i("i", "Updated Successfully");
                         else
-                            Log.i("i", "Updated FAILED XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+                            Log.i("i", "Updated FAILED");
                     }
                 });
     }

@@ -3,6 +3,7 @@ package com.example.ahmed.tamrah;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -108,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
         TextView email = (TextView) header.findViewById(R.id.user_email);
         userImg = (CircleImageView) header.findViewById(R.id.nav_profile_image);
         userImg.setVisibility(View.VISIBLE);
-
         if (user.isLoggedIn()) {
             nav_menu.findItem(R.id.ShoppingCart).setVisible(true);
             nav_menu.findItem(R.id.Profile).setVisible(true);
@@ -292,6 +292,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        menu.findItem(R.id.cartIconeHome).setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
 

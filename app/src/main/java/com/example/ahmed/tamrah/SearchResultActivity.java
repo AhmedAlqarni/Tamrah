@@ -45,6 +45,8 @@ public class SearchResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
 
+        if(!MainActivity.user.isLoggedIn())
+            findViewById(R.id.Floating_Add_Offer).setVisibility(View.INVISIBLE);
         //ToolBar
         toolBar = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolBar);
