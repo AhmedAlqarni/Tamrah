@@ -110,13 +110,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Ahmed Alqarni"
+                            android:maxWidth="200dp"
                             android:textSize="18sp" />
 
                         <EditText
                             android:id="@+id/hidden_edit_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Enter your name" />
+                            android:hint="Enter your name"
+                            android:maxWidth="200dp"
+                            android:visibility="invisible"/>
                     </ViewSwitcher>
 
                     <Button
@@ -136,80 +139,10 @@
 
                 <!--Email-->
                 <android.support.constraint.ConstraintLayout
-                    android:id="@+id/EmailFrame"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_below="@id/NameFrame"
-                    android:layout_marginBottom="2dp"
-                    android:background="@color/white"
-                    android:minWidth="0dp">
-
-                    <TextView
-                        android:id="@+id/te3tVi5ew6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:text="Email:"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/my_switcher2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginStart="32dp"
-                        android:textSize="14sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.04"
-                        app:layout_constraintStart_toStartOf="@+id/te3tVi5ew6"
-                        app:layout_constraintTop_toBottomOf="@+id/te3tVi5ew6"
-                        app:layout_constraintVertical_bias="0.0">
-
-                        <TextView
-                            android:id="@+id/EmailInput"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Alqarni@hotmail.com"
-                            android:textSize="18sp" />
-
-                        <EditText
-                            android:id="@+id/hidden_edit_email"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:autoLink="email"
-                            android:hint="Enter your email" />
-                    </ViewSwitcher>
-
-                    <Button
-                        android:id="@+id/editEmailBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:onClick="settingsEditEmail"
-                        android:text="Edit"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.91"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.38" />
-                </android.support.constraint.ConstraintLayout>
-
-
-                <!--Email-->
-                <android.support.constraint.ConstraintLayout
                     android:id="@+id/PasswordFrame"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/EmailFrame"
+                    android:layout_below="@id/NameFrame"
                     android:layout_marginBottom="2dp"
                     android:background="@color/white">
 
@@ -248,6 +181,7 @@
                             android:layout_height="wrap_content"
                             android:inputType="textPassword"
                             android:text="***************"
+                            android:maxWidth="200dp"
                             android:textSize="18sp" />
 
                         <EditText
@@ -255,7 +189,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Enter your password"
-                            android:inputType="textPassword" />
+                            android:inputType="textPassword"
+                            android:maxWidth="200dp"
+                            android:visibility="invisible"/>
                     </ViewSwitcher>
 
                     <Button
@@ -359,6 +295,7 @@
                             android:layout_height="wrap_content"
                             android:text="+966544444444"
                             android:textSize="18sp"
+                            android:maxLength="14"
                             tools:layout_editor_absoluteX="97dp"
                             tools:layout_editor_absoluteY="18dp" />
 
@@ -366,7 +303,9 @@
                             android:id="@+id/hidden_edit_phone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Enter phone number" />
+                            android:hint="Enter phone number"
+                            android:maxLength="14"
+                            android:visibility="invisible"/>
                     </ViewSwitcher>
 
                     <Button
@@ -428,13 +367,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Jeddah, Sultan St."
+                            android:maxWidth="200dp"
                             android:textSize="18sp" />
 
                         <EditText
                             android:id="@+id/hidden_edit_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Enter your address " />
+                            android:hint="Enter your address "
+                            android:maxWidth="200dp"
+                            android:visibility="invisible"/>
                     </ViewSwitcher>
 
                     <Button
@@ -495,13 +437,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="25 years selling Tamr..."
+                            android:maxWidth="200dp"
                             android:textSize="18sp" />
 
                         <EditText
                             android:id="@+id/hidden_edit_Bio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Enter your bio" />
+                            android:maxWidth="200dp"
+                            android:hint="Enter your bio"
+                            android:visibility="invisible"/>
                     </ViewSwitcher>
 
                     <Button

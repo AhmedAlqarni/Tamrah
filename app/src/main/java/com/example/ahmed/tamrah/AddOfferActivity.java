@@ -159,6 +159,7 @@ public class AddOfferActivity extends AppCompatActivity {
         String UID = Auth.fbAuth.getCurrentUser().getUid();
         DatabaseReference DBRef = FirebaseDatabase.getInstance().getReference().child("User").child(UID).child("Offer");
         DBRef.child(OID).setValue(OID);
-
+        finish();
+        Toast.makeText(this, "Your offer has been published", Toast.LENGTH_SHORT).show();
     }
 }

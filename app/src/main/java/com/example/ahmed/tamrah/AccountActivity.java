@@ -154,8 +154,9 @@ public class AccountActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 0){
-            if(resultCode != -1) return;
+            if(resultCode == -1) return;
             user = (User) data.getSerializableExtra("User");
+            setResult(0, new Intent().putExtra("User", user));
             updateContext();
         }
 

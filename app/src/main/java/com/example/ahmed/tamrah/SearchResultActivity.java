@@ -37,6 +37,7 @@ public class SearchResultActivity extends AppCompatActivity {
     private DatabaseReference databaseReference ;
     private String query;
     private Toolbar toolBar;
+    private final Context context = this;
 
 
     @Override
@@ -66,8 +67,13 @@ public class SearchResultActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
+                if(recyclerView.getAdapter().getItemCount() > 0) {
+                    Intent intent = new Intent(context, SearchResultActivity.class);
+                    intent.putExtra("text", query);
+                    startActivity(intent);
+                    finish();
+                }
                 firebaseOfferSearch(query);
-
                 return false;
             }
 
@@ -75,11 +81,6 @@ public class SearchResultActivity extends AppCompatActivity {
 
         });
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Offer");
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -90,19 +91,26 @@ public class SearchResultActivity extends AppCompatActivity {
                 TextView tv = (TextView) findViewById(R.id.OfferTitle);
                 Intent intent = new Intent(SearchResultActivity.this, OfferActivity.class);
                 intent.putExtra("Offer", offerList.get(position));
-                startActivity(intent);
+                startActivityForResult(intent, 0);
             }
 
             @Override
             public void onMovieLongClick(View view, int position) {
 
             }
-
-
         }));
-        query = getIntent().getStringExtra("text");
-        Log.i("44",query);
-        firebaseOfferSearch(query);
+        firebaseOfferSearch("");
+        if(getIntent().getStringExtra("text").equals("$"))
+            recyclerView.setAdapter(null);
+        else{
+            firebaseOfferSearch(getIntent().getStringExtra("text"));
+            getIntent().putExtra("text", "$");
+
+        }
+
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
 
     }
 
@@ -120,6 +128,8 @@ public class SearchResultActivity extends AppCompatActivity {
     }
 
     public void firebaseOfferSearch(String query){
+        recyclerView.setAdapter(null);
+
         Query firebaseQuerySearch = databaseReference.orderByChild("Type").startAt(query).endAt(query+"\uf8ff");
 
         FirebaseRecyclerAdapter<Offer,MyViewHolder1> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Offer, MyViewHolder1>(
