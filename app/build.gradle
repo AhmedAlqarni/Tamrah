@@ -11,6 +11,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     signingConfigs {
         release {
             storeFile file("/Users/khalidalnamlah/Documents/SWE418/release/SHA/k.keystore.jks ")
@@ -27,6 +28,7 @@ android {
     }
     sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
 }
+
 
 dependencies {
     implementation 'com.google.firebase:firebase-database:11.8.0'

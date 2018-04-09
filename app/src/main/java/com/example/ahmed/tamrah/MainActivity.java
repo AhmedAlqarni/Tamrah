@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mToggle;
     private Toolbar toolBar;
     static User user;
+    private TextView toolBarTitle;
     static CircleImageView userImg;
     private NavigationView nvDrawer;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -85,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
         //ToolBar
         toolBar = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolBar);
+        //Typeface typeface = Typeface.createFromAsset(getAssets(),"fonts/alegreya_sans_italic.tff");
+        //toolBarTitle = (TextView) findViewById(R.id.toolbar_title);
+        //toolBarTitle.setTypeface(typeface);
 
         //Left menu Drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
@@ -99,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.flContents, new HomeFrag()).commit();
         updateMenuBar();
+
+
     }
 
 
