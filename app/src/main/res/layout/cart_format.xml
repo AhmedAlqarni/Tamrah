@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<!--Offer Block-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/offerImg"
+        android:layout_width="164dp"
+        android:layout_height="164dp"
+        android:padding="1dp"
+        app:civ_border_color="@color/white" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="4"
+        android:paddingLeft="3dp">
+
+        <TextView
+            android:id="@+id/TamrahType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/Rating"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="6dp"
+            android:background="@color/colorPrimary"
+            android:padding="4dp"
+            android:radius="10dp"
+            android:text="Ajuah"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/OfferTitle"
+            android:layout_width="wrap_content"
+            android:maxWidth="160dp"
+            android:layout_height="wrap_content"
+            android:maxLength="14"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/TamrahType"
+            android:layout_marginTop="8dp"
+            android:text="Title"
+            android:textColor="@color/darkgrey"
+            android:textSize="18sp" />
+
+        <!--<Button-->
+            <!--android:id="@+id/removeOffer"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:background="@color/red"-->
+            <!--android:text="X"-->
+            <!--android:textSize="20dp"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:layout_margin="6dp"-->
+            <!--android:onClick="removeItem"-->
+            <!--/>-->
+
+        <TextView
+            android:id="@+id/city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/TamrahType"
+            android:layout_below="@+id/TamrahType"
+            android:layout_marginTop="6dp"
+            android:text="Jeddah"
+            android:textColor="@color/darkgrey"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/quantityText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/TamrahType"
+            android:layout_below="@+id/city"
+            android:layout_marginTop="6dp"
+            android:text="Quantity: "
+            android:textColor="@color/darkgrey"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/quantityText"
+            android:layout_below="@+id/city"
+            android:layout_marginTop="6dp"
+            android:text="19.5"
+            android:textColor="@color/darkgrey"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/quantityKg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/quantity"
+            android:layout_below="@+id/city"
+            android:layout_marginTop="6dp"
+            android:text="Kg"
+            android:layout_marginLeft="6dp"
+            android:textColor="@color/darkgrey"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/Rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/OfferTitle"
+            android:layout_below="@+id/OfferTitle"
+            android:layout_marginTop="6dp"
+            android:text="4.8"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/totalRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/Rating"
+            android:layout_alignBottom="@+id/Rating"
+            android:layout_toEndOf="@+id/Rating"
+            android:text="/5"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/OfferPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="14dp"
+            android:layout_below="@id/city"
+            android:text="35 SAR"
+            android:textColor="@color/darkgrey"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/OID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/TamrahType"
+            android:layout_alignEnd="@+id/OfferTitle"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+</LinearLayout>

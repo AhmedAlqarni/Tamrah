@@ -1,6 +1,7 @@
 package com.example.ahmed.tamrah;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Created by Warsh on 3/7/2018.
@@ -66,7 +67,10 @@ public class Offer implements Serializable{
     }
 
     public String getRate() {
-        return Rate;
+        if(Double.parseDouble(Rate) < 0 )
+            return "N\\A";
+        else
+            return Rate;
     }
 
     public void setRate(String rate) {
@@ -97,17 +101,16 @@ public class Offer implements Serializable{
         this.OfferImage = offerImage;
     }
 
-//    public void setValues(Map<String,Object> offerValues) {
-//        Title = offerValues.get("Title").toString();
-//        //mDesc = offerValues.get("region").toString();
-//        Type = offerValues.get("Type").toString();
-//        //phoneNum = offerValues.get("phoneNum").toString();
-//        Seller = offerValues.get("Seller").toString();
-//        Rate = offerValues.get("Rate").toString();
-//        //isSeller = Boolean.parseBoolean(profileValues.get("isSeller").toString());
-//        //profilePic = offerValues.get("profileImage").toString();
-//        Price = offerValues.get("Price").toString();
-//
-//    }
+    public void setValues(Map<String,Object> offerValues) {
+        Title = offerValues.get("Title").toString();
+        Description = offerValues.get("Description").toString();
+        Type = offerValues.get("Type").toString();
+        Seller = offerValues.get("Seller").toString();
+        Rate = offerValues.get("Rate").toString();
+        Type = offerValues.get("Type").toString();
+        OfferImage = offerValues.get("OfferImage").toString();
+        Price = offerValues.get("Price").toString();
+
+    }
 
 }

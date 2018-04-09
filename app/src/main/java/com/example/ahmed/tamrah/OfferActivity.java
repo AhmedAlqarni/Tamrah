@@ -1,9 +1,11 @@
 package com.example.ahmed.tamrah;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,8 +14,10 @@ import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -33,22 +37,9 @@ public class OfferActivity extends AppCompatActivity {
     private Offer offer;
     private User seller;
     private Toolbar toolBar;
-    //private TextView
-//
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        return super.onKeyDown(keyCode, event);
-//        if(keyCode == KeyEvent.KEYCODE_BACK) {
-//            finish();
-//        }
-//        return super.onKeyDown(keyCode, event);
-//    }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        seller = new User();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offer);
         offer = (Offer) getIntent().getSerializableExtra("Offer");
@@ -75,9 +66,11 @@ public class OfferActivity extends AppCompatActivity {
 
     private void fetchProfile(final String UID) {
         if(MainActivity.user.getUID().equals(UID)) {
+            seller = MainActivity.user;
             updateContext();
             return;
         }
+        seller = new User();
         DatabaseReference DBRef = FirebaseDatabase.getInstance().getReference("User");
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Retrieving Offer ...");
@@ -131,17 +124,21 @@ public class OfferActivity extends AppCompatActivity {
 
     private void setViewBasedOnUser() {
         if(MainActivity.user.getUID().equals(offer.getSeller())){
-            findViewById(R.id.offerReviewPanel).setVisibility(View.INVISIBLE);
-            findViewById(R.id.offerAddReview).setVisibility(View.INVISIBLE);
-            findViewById(R.id.AddOfferToCart).setVisibility(View.INVISIBLE);
-            ((Button) findViewById(R.id.AddOfferToCart)).setHeight(0);
-            findViewById(R.id.QuantitiyKG).setVisibility(View.INVISIBLE);
+            findViewById(R.id.offerReviewPanel).setVisibility(View.GONE);
+            findViewById(R.id.offerAddReview).setVisibility(View.GONE);
+            findViewById(R.id.AddOfferToCart).setVisibility(View.GONE);
+            findViewById(R.id.QuantitiyKG).setVisibility(View.GONE);
         }
 
         else{
-            findViewById(R.id.EditOffer).setVisibility(View.INVISIBLE);
-            ((Button) findViewById(R.id.EditOffer)).setHeight(0);
-
+            String[] quantityArray = new String[41];
+            quantityArray[0] = "Quantity (in Kilograms)";
+            for (int i = 1; i<quantityArray.length; i++)
+                quantityArray[i] = (float) i / 2 + "";
+            findViewById(R.id.EditOffer).setVisibility(View.GONE);
+            ArrayAdapter<String> adp2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, quantityArray);
+            adp2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            ((Spinner) findViewById(R.id.QuantitiyKG)).setAdapter(adp2);
         }
     }
 
@@ -163,10 +160,37 @@ public class OfferActivity extends AppCompatActivity {
         }
     }
 
-    public void goToUserProfile(View view){
+    public void goToUserProfile(View view) {
         Intent intent = new Intent(this, AccountActivity.class);
-        intent.putExtra("UID", seller.getUID());
+        if (MainActivity.user.getUID().equals(seller.getUID())) {
+            intent.putExtra("UID", "myProfile");
+            intent.putExtra("User", seller);
+        } else
+            intent.putExtra("UID", seller.getUID());
         startActivity(intent);
+    }
+
+    public void addToCart(View view){
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        if(((Spinner) findViewById(R.id.QuantitiyKG)).getSelectedItem().equals("Quantity (in Kilograms)")){
+            alertDialog.setTitle("Unspecified Quantity");
+            alertDialog.setMessage("Specify the quantity you\nwant to order (in Kg)");
+            alertDialog.show();
+        }
+        else{
+            DatabaseReference DBRef = FirebaseDatabase.getInstance().getReference().child("User")
+                    .child(Auth.fbAuth.getUid()).child("Cart").child(offer.getOID());
+            DBRef.child("Quantity").setValue(((Spinner) findViewById(R.id.QuantitiyKG)).
+                    getSelectedItem());
+
+            alertDialog.setTitle("Offer added to cart");
+            alertDialog.setMessage("An order of " + ((Spinner) findViewById(R.id.QuantitiyKG)).
+                    getSelectedItem() + " Kilograms of this offer\nhad been successfully added to\n" +
+                    "your cart");
+            alertDialog.show();
+        }
+
+
     }
 
 }

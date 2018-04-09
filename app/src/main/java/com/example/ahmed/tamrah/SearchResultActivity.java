@@ -32,12 +32,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SearchResultActivity extends AppCompatActivity {
 
     private List<Offer> offerList = new ArrayList<>();
-    private RecyclerView recyclerView; //static by Khalid
-    private OffersAdapter mAdapter;//static by Khalid
+    private RecyclerView recyclerView;
     private DatabaseReference databaseReference ;
-    private String query;
     private Toolbar toolBar;
-    private final Context context = this;
 
 
     @Override
@@ -62,8 +59,6 @@ public class SearchResultActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //Log.e("onQueryTextChange", "called");
-                Log.i("", "xxxxxxxx");
                 return false;
             }
 
@@ -112,9 +107,6 @@ public class SearchResultActivity extends AppCompatActivity {
 
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-
-    }
 
     //BackButton toolbar
     @Override
@@ -164,27 +156,17 @@ public class SearchResultActivity extends AppCompatActivity {
             //Created by Khalid
             this.view = view;
 
-//            title = (TextView) view.findViewById(R.id.OfferTitle);
-//            type = (TextView) view.findViewById(R.id.TamrahType);
-//            city = (TextView) view.findViewById(R.id.city);
-//            price = (TextView) view.findViewById(R.id.OfferPrice);
-//            rate = (TextView) view.findViewById(R.id.Rating);
 
         }
 
         public void setDetails(String title, String type, String price, String city,
                                String rate, String imgURL){
-//            Log.i("38",type);
             android.support.v7.widget.AppCompatImageView imgView = (android.support.v7.widget.AppCompatImageView) view.findViewById(R.id.offerImg);
             TextView textViewTitle = (TextView) view.findViewById(R.id.OfferTitle);
             TextView textViewType = (TextView)view.findViewById(R.id.TamrahType);
             TextView textViewPrice = (TextView)view.findViewById(R.id.OfferPrice);
             TextView textViewCity = (TextView)view.findViewById(R.id.city);
-            //TextView textViewDescription = (TextView)view.findViewById(R.id.);
             TextView textViewRate = (TextView)view.findViewById(R.id.Rating);
-            // TextView textViewImg = view.findViewById(R.id.);
-            TextView textViewOID = (TextView)view.findViewById(R.id.OID);
-
 
             textViewTitle.setText(title);
             textViewType.setText(type);
@@ -193,22 +175,7 @@ public class SearchResultActivity extends AppCompatActivity {
             textViewRate.setText(rate+"");
             if(!imgURL.equals(""))
                 imgView.setImageDrawable(new ImageFetcher().fetch(imgURL));
-            //textViewOID.setText()
-
         }
-    }
-
-    //Button Handler
-    //this is for any clicked offer in any page
-    public void goToOffer(View view) {
-//        ecyclerView.positi
-//        Offer offer = new Offer();
-//        TextView tv = (TextView) findViewById(R.id.OfferTitle);
-//        Log.i("the title is :             ",tv.getText().toString());
-//
-//        Intent intent = new Intent(this, OfferActivity.class);
-////        intent.putExtra("OID", );
-//        startActivity(intent);
     }
 
     public void goToAddOffer(View view) {
@@ -260,10 +227,7 @@ public class SearchResultActivity extends AppCompatActivity {
     }
 
     public static interface ClickListener{
-        public void onMovieClick(View view, int position);
-        public void onMovieLongClick(View view, int position);
+        void onMovieClick(View view, int position);
+        void onMovieLongClick(View view, int position);
     }
-
-
-
 }

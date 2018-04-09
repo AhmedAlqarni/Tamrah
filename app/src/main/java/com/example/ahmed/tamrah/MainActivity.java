@@ -184,8 +184,10 @@ public class MainActivity extends AppCompatActivity {
                 fragmentClass = HomeFrag.class;
                 break;
             case R.id.ShoppingCart:
-                fragmentClass = ShoppingCartFrag.class;
-                break;
+                intent = new Intent(this, CartActivity.class);
+                intent.putExtra("User", this.user);
+                startActivity(intent);
+                return;
             case R.id.Account_Settings:
                 Log.i("......",user.getName());
                 intent = new Intent(this, AccountSettingsActivity.class);
