@@ -163,6 +163,7 @@
     <orderEntry type="library" name="com.firebaseui:firebase-ui-auth-0.6.2" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-wallet-11.8.0" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-auth-api-phone-11.8.0" level="project" />
+    <orderEntry type="library" name="io.card:android-sdk-5.3.2" level="project" />
     <orderEntry type="library" name="com.android.support:support-core-ui-25.4.0" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-instantapps-license-11.8.0" level="project" />
     <orderEntry type="library" name="com.parse.bolts:bolts-applinks:1.4.0@jar" level="project" />
@@ -228,6 +229,7 @@
     <orderEntry type="library" name="com.google.android.gms:play-services-tagmanager-license-11.8.0" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-places-11.8.0" level="project" />
     <orderEntry type="library" name="com.google.firebase:firebase-config-11.8.0" level="project" />
+    <orderEntry type="library" name="com.squareup.okhttp3:okhttp:3.2.0@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-plus-license-11.8.0" level="project" />
     <orderEntry type="library" scope="TEST" name="junit:junit:4.12@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-cast-11.8.0" level="project" />
@@ -244,6 +246,7 @@
     <orderEntry type="library" name="com.google.android.gms:play-services-analytics-impl-license-11.8.0" level="project" />
     <orderEntry type="library" name="com.android.support:support-v4-25.4.0" level="project" />
     <orderEntry type="library" name="com.android.support:support-media-compat-25.4.0" level="project" />
+    <orderEntry type="library" name="com.paypal.sdk:paypal-android-sdk-2.14.1" level="project" />
     <orderEntry type="library" name="com.google.firebase:firebase-database-connection-11.8.0" level="project" />
     <orderEntry type="library" name="com.firebaseui:firebase-ui-0.6.2" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-maps-11.8.0" level="project" />
@@ -252,6 +255,7 @@
     <orderEntry type="library" name="com.google.android.gms:play-services-safetynet-11.8.0" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-analytics-license-11.8.0" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-auth-base-11.8.0" level="project" />
+    <orderEntry type="library" name="com.squareup.okio:okio:1.6.0@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-vision-license-11.8.0" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-location-11.8.0" level="project" />
     <orderEntry type="library" name="com.google.firebase:firebase-storage-common-license-11.8.0" level="project" />

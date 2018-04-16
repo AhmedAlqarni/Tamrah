@@ -1,5 +1,6 @@
 package com.example.ahmed.tamrah;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -21,7 +23,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalPayment;
+import com.paypal.android.sdk.payments.PayPalService;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
 
+import org.json.JSONException;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,11 +41,16 @@ public class CartActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<CartItem> itemList = new ArrayList<>();
     private CartAdapter mAdapter;
+    private static PayPalConfiguration config = new PayPalConfiguration()
+            .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
+            .clientId("AexoeTQlJhyKie47nTbqshmtwk8Ds3fQicOIG3T9BiY1U3PK2S30XyZCnvXwYleySF0OcHM6PDVEhBbL");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
         fetchCartItems();
+        //final Button button = (Button) findViewById(R.id.EditOffer);
+
 
         mAdapter = new CartAdapter(itemList);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -80,8 +95,9 @@ public class CartActivity extends AppCompatActivity {
                         else
                             break;
                     }
-                    progressDialog.dismiss();
                     fetchOffer(tmpItemList);
+                    progressDialog.dismiss();
+
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -123,6 +139,56 @@ public class CartActivity extends AppCompatActivity {
 //    public void removeItem(View view){
 //
 //    }
+
+    public void checkout(View view){
+        double total = 0;
+        for (int i = 0; i < itemList.size(); i++){
+            total += Double.parseDouble(itemList.get(i).getOffer().getPrice()) * Double.parseDouble(itemList.get(i).getQuantity());
+        }
+
+        total /= 3.75;
+
+        Intent serviceConfig = new Intent(this, PayPalService.class);
+        serviceConfig.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+        startService(serviceConfig);
+
+        PayPalPayment payment = new PayPalPayment(new BigDecimal(total),
+                "USD", "Tamrah App Order", PayPalPayment.PAYMENT_INTENT_SALE);
+
+        Intent paymentConfig = new Intent(this, PaymentActivity.class);
+        paymentConfig.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+        paymentConfig.putExtra(PaymentActivity.EXTRA_PAYMENT, payment);
+        startActivityForResult(paymentConfig, 0);
+
+    }
+
+    @Override
+    protected void onActivityResult (int requestCode, int resultCode, Intent data){
+        if (resultCode == Activity.RESULT_OK){
+            PaymentConfirmation confirm = data.getParcelableExtra(
+                    PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+            if (confirm != null){
+                try {
+                    Log.i("sampleapp", confirm.toJSONObject().toString(4));
+
+                    // TODO: send 'confirm' to your server for verification
+
+                } catch (JSONException e) {
+                    Log.e("sampleapp", "no confirmation data: ", e);
+                }
+            }
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            Log.i("sampleapp", "The user canceled.");
+        } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
+            Log.i("sampleapp", "Invalid payment / config set");
+        }
+    }
+
+    @Override
+    public void onDestroy(){
+        stopService(new Intent(this, PayPalService.class));
+        super.onDestroy();
+    }
 
     class RecyclerTouchListener implements RecyclerView.OnItemTouchListener{
         private GestureDetector mGestureDetector;
