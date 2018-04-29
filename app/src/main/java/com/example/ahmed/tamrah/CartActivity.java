@@ -1,8 +1,10 @@
 package com.example.ahmed.tamrah;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -175,6 +178,18 @@ public class CartActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult (int requestCode, int resultCode, Intent data){
         if (resultCode == Activity.RESULT_OK){
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("Transaction Successful");
+            alertDialog.setMessage("The Transaction has been made\nThe seller will contact you soon");
+            updateQuantitiesAfterTransaction();
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
             PaymentConfirmation confirm = data.getParcelableExtra(
                     PaymentActivity.EXTRA_RESULT_CONFIRMATION);
             if (confirm != null){
@@ -188,10 +203,37 @@ public class CartActivity extends AppCompatActivity {
                 }
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("Transaction Canceled");
+            alertDialog.setMessage("The Transaction has been canceled");
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            //FirebaseAuth.getInstance().signOut();
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
             Log.i("sampleapp", "The user canceled.");
         } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("Transaction Canceled");
+            alertDialog.setMessage("The Transaction has been canceled\nCard Information are invalid");
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            //FirebaseAuth.getInstance().signOut();
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
             Log.i("sampleapp", "Invalid payment / config set");
         }
+    }
+
+    private void updateQuantitiesAfterTransaction() {
+
+
     }
 
     @Override
