@@ -169,7 +169,7 @@ public class SearchResultsFrag extends Fragment {
             @Override
             protected void populateViewHolder(OffersAdapter.MyViewHolder viewHolder, Offer model, int position) {
 
-                viewHolder.setDetails(model.getTitle(), model.getType(), model.getPrice(), model.getCity(), model.getRate());
+                viewHolder.setDetails(model.getTitle(), model.getType(), model.getPrice(), model.getCity());
             }
         };
         recyclerView.setAdapter(mAdapter);

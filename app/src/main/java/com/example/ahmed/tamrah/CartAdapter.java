@@ -51,7 +51,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
     public void onBindViewHolder(MyViewHolder holder, int position) {
         CartItem cartItem = cartItemList.get(position);
         holder.title.setText(cartItem.getOffer().getTitle());
-        holder.rate.setText(cartItem.getOffer().getRate());
         holder.city.setText(cartItem.getOffer().getCity());
         holder.type.setText(cartItem.getOffer().getType());
         holder.price.setText(cartItem.getOffer().getPrice() + " S.R.");

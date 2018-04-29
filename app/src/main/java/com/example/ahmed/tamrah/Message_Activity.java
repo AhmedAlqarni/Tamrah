@@ -37,38 +37,49 @@ public class Message_Activity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser mCurrentUser;
     private DatabaseReference databaseReference2;
+    private DatabaseReference databaseReference1;
+
+    public Message_Activity() {
+    }
+    //private DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("messages").child(khalid+"_"+Kfupm);;
+
+    // databaseReference1 = FirebaseDatabase.getInstance().getReference().child("messages").child(khalid+"_"+Kfupm);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_);
+        final String Kfupm = getIntent().getStringExtra("SellerUID");
+        final String khalid = getIntent().getStringExtra("CustomerUID");
 
-        final String Ahmed = "LKfnVWXXIHUvlP5kcaR1N2tpiOC2";
-        final String khalid="sZeFU6Rtc2clNl8O2jqER98Rfek1";
         mCurrentUser = Auth.fbAuth.getCurrentUser();
         editTextMessage = (EditText) findViewById(R.id.TextToSend);
+        //databaseReference1 = FirebaseDatabase.getInstance().getReference().child("messages").child(Kfupm+"_"+khalid);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("messages");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        //databaseReference1 = databaseReference;
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild(Ahmed+"_"+khalid)){
-                    databaseReference = FirebaseDatabase.getInstance().getReference().child("messages").child(khalid+"_"+Ahmed);
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.hasChild(khalid+"_"+Kfupm)) {
+                    // run some code
+                    databaseReference1 = FirebaseDatabase.getInstance().getReference().child("messages").child(khalid+"_"+Kfupm);
+                    executeStrart();
                 }
-                else if(dataSnapshot.hasChild(khalid+"_"+Ahmed)){
-                    databaseReference = FirebaseDatabase.getInstance().getReference().child("messages").child(Ahmed+"_"+khalid);
-                }
-                else{
-                    databaseReference = FirebaseDatabase.getInstance().getReference().child("messages").child(khalid+"_"+Ahmed);
+                else {
+                    databaseReference1 = FirebaseDatabase.getInstance().getReference().child("messages").child(Kfupm+"_"+khalid);
+                    executeStrart();
 
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-
         });
+
+
         mMessageList=(RecyclerView)findViewById(R.id.messageRec);
         mMessageList.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -80,30 +91,30 @@ public class Message_Activity extends AppCompatActivity {
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser() == null){
+                if(firebaseAuth.getCurrentUser() == null){ // need reviewing ...
                     startActivity(new Intent( Message_Activity.this, SignupActivity.class));
                 }
             }
         };
 
-        FirebaseRecyclerAdapter<Message,MessageViewHolder> firebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
-                        Message.class,
-                        R.layout.message,
-                        MessageViewHolder.class,
-                        databaseReference
-                ){
-
-
-                    @Override
-                    protected void populateViewHolder(MessageViewHolder viewHolder, Message model, int position) {
-                        Log.i("","the name is kdjfkldsjdjldsjfksjdfklsjdklsjlsdjflsd:"+model.getName());
-                        viewHolder.setContent(model.getContent());
-                        viewHolder.setName(model.getName());
-                    }
-                };
-        mMessageList.setAdapter(firebaseRecyclerAdapter);
-
+//        FirebaseRecyclerAdapter<Message,MessageViewHolder> firebaseRecyclerAdapter =
+//                new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
+//                        Message.class,
+//                        R.layout.message,
+//                        MessageViewHolder.class,
+//                        databaseReference1
+//                ){
+//
+//
+//                    @Override
+//                    protected void populateViewHolder(MessageViewHolder viewHolder, Message model, int position) {
+//                        Log.i("","the name is kdjfkldsjdjldsjfksjdfklsjdklsjlsdjflsd:"+model.getName());
+//                        viewHolder.setContent(model.getContent());
+//                        viewHolder.setName(model.getName());
+//                    }
+//                };
+//        mMessageList.setAdapter(firebaseRecyclerAdapter);
+//
 
 
     }
@@ -113,7 +124,7 @@ public class Message_Activity extends AppCompatActivity {
         databaseReference2=FirebaseDatabase.getInstance().getReference().child("User").child(mCurrentUser.getUid());
         final String messageValue = editTextMessage.getText().toString().trim();
         if(!TextUtils.isEmpty(messageValue)){
-            final DatabaseReference newPost = databaseReference.push();
+            final DatabaseReference newPost = databaseReference1.push();
             databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -136,54 +147,70 @@ public class Message_Activity extends AppCompatActivity {
         }mMessageList.scrollToPosition(mMessageList.getAdapter().getItemCount());
     }
 
-        public Message_Activity(){
+//        @Override
+//        protected void onStart() {
+//            super.onStart();
+//
+//            FirebaseRecyclerAdapter<Message,MessageViewHolder> firebaseRecyclerAdapter =
+//                    new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
+//                            Message.class,
+//                            R.layout.message,
+//                            MessageViewHolder.class,
+//                            databaseReference1
+//                    ){
+//
+//
+//                @Override
+//                protected void populateViewHolder(MessageViewHolder viewHolder, Message model, int position) {
+//                    Log.i("","the name is kdjfkldsjdjldsjfksjdfklsjdklsjlsdjflsd:"+model.getName());
+//                    viewHolder.setContent(model.getContent());
+//                    viewHolder.setName(model.getName());
+//                }
+//            };
+//            mMessageList.setAdapter(firebaseRecyclerAdapter);
+//        }
 
+    public void executeStrart(){
+        FirebaseRecyclerAdapter<Message,MessageViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
+                        Message.class,
+                        R.layout.message,
+                        MessageViewHolder.class,
+                        databaseReference1
+                ){
+                    @Override
+                    protected void populateViewHolder(MessageViewHolder viewHolder, Message model, int position) {
+                        Log.i("","the name is kdjfkldsjdjldsjfksjdfklsjdklsjlsdjflsd:"+model.getName());
+                        viewHolder.setContent(model.getContent());
+                        viewHolder.setName(model.getName());
+                    }
+                };
+        mMessageList.setAdapter(firebaseRecyclerAdapter);
+    }
+
+    public static class MessageViewHolder extends RecyclerView.ViewHolder{
+
+        View mView;
+
+        public MessageViewHolder(View itemView) {
+            super(itemView);
+            mView = itemView;
         }
-        @Override
-        protected void onStart() {
-            super.onStart();
-            FirebaseRecyclerAdapter<Message,MessageViewHolder> firebaseRecyclerAdapter =
-                    new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
-                            Message.class,
-                            R.layout.message,
-                            MessageViewHolder.class,
-                            databaseReference
-                    ){
 
-
-                @Override
-                protected void populateViewHolder(MessageViewHolder viewHolder, Message model, int position) {
-                    Log.i("","the name is kdjfkldsjdjldsjfksjdfklsjdklsjlsdjflsd:"+model.getName());
-                    viewHolder.setContent(model.getContent());
-                    viewHolder.setName(model.getName());
-                }
-            };
-            mMessageList.setAdapter(firebaseRecyclerAdapter);
-        }
-
-        public static class MessageViewHolder extends RecyclerView.ViewHolder{
-
-            View mView;
-
-            public MessageViewHolder(View itemView) {
-                super(itemView);
-                mView = itemView;
-            }
-
-            public void setContent(String content){
+        public void setContent(String content){
 //                Log.i("193",content);
 
-                TextView message_content = (TextView) mView.findViewById(R.id.ChatMessg);
-                message_content.setText(content);
-
-            }
-            public void setName(String name){
-//                Log.i("193",name);
-                TextView name_content = (TextView) mView.findViewById(R.id.Sender);
-                name_content.setText(name);
-            }
-
+            TextView message_content = (TextView) mView.findViewById(R.id.ChatMessg);
+            message_content.setText(content);
 
         }
+        public void setName(String name){
+//                Log.i("193",name);
+            TextView name_content = (TextView) mView.findViewById(R.id.Sender);
+            name_content.setText(name);
+        }
+
+
+    }
 
 }

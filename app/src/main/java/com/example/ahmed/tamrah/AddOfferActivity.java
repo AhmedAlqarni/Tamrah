@@ -52,7 +52,9 @@ public class AddOfferActivity extends AppCompatActivity {
         final EditText descView = (EditText) findViewById(R.id.OfferDiscInput);
         final EditText priceView = (EditText) findViewById(R.id.OfferPriceInput);
         final EditText typeView = (EditText) findViewById(R.id.OfferTypeInput);
+        final EditText quantityView = (EditText) findViewById(R.id.availableQuantity);
         final Spinner citySpinner = (Spinner) findViewById(R.id.Region);
+
         Button submitBtn = (Button) findViewById(R.id.PublishOfferBtn);
 
 
@@ -79,7 +81,7 @@ public class AddOfferActivity extends AppCompatActivity {
             public void onClick(View view) {
                 offer = new Offer(title.getText().toString(), typeView.getText().toString(),
                         citySpinner.getSelectedItem().toString(), (priceView.getText().toString()),
-                        "-1", descView.getText().toString(),String.valueOf(ImagedownloadUrl));
+                        "-1", descView.getText().toString(),String.valueOf(ImagedownloadUrl), quantityView.getText().toString());
                 publish();
             }
         });
@@ -134,14 +136,17 @@ public class AddOfferActivity extends AppCompatActivity {
     public void publish() {
         DatabaseReference FBofferNode = FirebaseDatabase.getInstance().getReference().child("Offer");
         Map offerPost = new HashMap();
-        offerPost.put("Seller", Auth.fbAuth.getUid()); //STUB
+        offerPost.put("Seller", Auth.fbAuth.getUid());
         offerPost.put("Title", offer.getTitle());
         offerPost.put("Description", offer.getDescription());
         offerPost.put("Price", offer.getPrice());
         offerPost.put("Type", offer.getType());
-        offerPost.put("Rate", offer.getRate());
         offerPost.put("OID", "");
         offerPost.put("OfferImage", offer.getOfferImage());
+        offerPost.put("SearchQuery", offer.getType().toLowerCase());
+        offerPost.put("City", MainActivity.user.getRegion());
+        offerPost.put("Quantity", offer.getQuantity());
+
 
         //FBofferNode.setValue(offerPost);
         FBofferNode = FBofferNode.child(FBofferNode.push().getKey());

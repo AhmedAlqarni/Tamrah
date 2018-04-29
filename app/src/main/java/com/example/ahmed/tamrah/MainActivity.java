@@ -1,8 +1,20 @@
 package com.example.ahmed.tamrah;
 //Ahmed Alqarni
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.message.BasicHeader;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,8 +26,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -28,6 +42,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.text.format.DateFormat;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,16 +60,44 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.VolleyLog;
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.android.gms.common.api.Response;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -345,29 +388,27 @@ public class MainActivity extends AppCompatActivity {
                 user = (User) data.getSerializableExtra("User");
             updateMenuBar();
         } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
-            //For reading a picture from the deviceif(requestCode ==   SELECTED_PICTURE && data != null) {
-            Uri uri = data.getData();
-            // Show the Selected Image onImageView ImageView iV = (ImageView) findViewById(R.id.imageViewAdding);
-            ImageView iV = (ImageView) findViewById(R.id.imageViewAdding);
-            getOrientation(this, uri);
-            try {
-                //profile_image
-                Bitmap loadedBitmap = getCorrectlyOrientedImage(this, uri, 1000);
-                iV.setImageBitmap(loadedBitmap);
-                //iV.setImageURI(uri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+            //For reading a picture from the device
+//            /if(requestCode ==   SELECTED_PICTURE && data != null) {
+//            Uri uri = data.getData();
+//            // Show the Selected Image onImageView ImageView iV = (ImageView) findViewById(R.id.imageViewAdding);
+//            ImageView iV = (ImageView) findViewById(R.id.imageViewAdding);
+//            getOrientation(this, uri);
+//            try {
+//                //profile_image
+//                Bitmap loadedBitmap = getCorrectlyOrientedImage(this, uri, 1000);
+//                iV.setImageBitmap(loadedBitmap);
+//                //iV.setImageURI(uri);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
             //for the Camera App>>>
             if (resultCode == RESULT_OK) {
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                //mImageView.setImageBitmap(imageBitmap); Image result
+                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                new ImageUploader().sendRequest(imageBitmap, this);
             }
         }
     }
-
 
     //Button Handler main function for all buttons
     //You can use it in any button page transtions only
@@ -391,4 +432,201 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
+}
+
+ class ImageUploader extends AsyncTask<Bitmap, Void, String> {
+    Context c;
+    @Override
+    protected String doInBackground(Bitmap... img) {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        img[0].compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+Log.i("i", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" + encodedImage);
+        try {
+
+            HttpClient client = new DefaultHttpClient();
+            //use your server path of php file
+            HttpPost post = new HttpPost("http://10.13.19.244:5000/upload");
+
+            MultipartEntity reqEntity = new MultipartEntity();
+            reqEntity.addPart("file","whatev",new ByteArrayInputStream(encodedImage.getBytes(StandardCharsets.UTF_8))
+,  "multipart/form-data");
+
+            post.setEntity(reqEntity);
+
+            HttpResponse response = client.execute(post);
+            HttpEntity resEntity = response.getEntity();
+            try {
+
+                final String response_str = EntityUtils.toString(resEntity);
+                if (resEntity != null) {
+                    Log.i("RESPONSE", response_str);
+                    AlertDialog alertDialog = new AlertDialog.Builder(c).create();
+                    alertDialog.setTitle("Type");
+                    alertDialog.setMessage("The Type is: " + response_str);
+
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "ok",
+                            new DialogInterface.OnClickListener() {
+                                //firebase logout
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+
+                                }
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "View Offers",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+            } catch (Exception ex) {
+                Log.e("Debug", "error: " + ex.getMessage(), ex);
+            }
+        } catch (Exception e) {
+            Log.e("Upload Exception", "");
+            e.printStackTrace();
+        }
+         return null;
+    }
+
+     public String sendRequest(Bitmap decodedImg, Context c) {this.c = c; return doInBackground(decodedImg);}
+ }
+
+class MultipartEntity implements HttpEntity {
+
+    private String boundary = null;
+
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    boolean isSetLast = false;
+    boolean isSetFirst = false;
+
+    public MultipartEntity() {
+        this.boundary = System.currentTimeMillis() + "";
+    }
+
+    public void writeFirstBoundaryIfNeeds() {
+        if (!isSetFirst) {
+            try {
+                out.write(("--" + boundary + "\r\n").getBytes());
+            } catch (final IOException e) {
+
+            }
+        }
+        isSetFirst = true;
+    }
+
+    public void writeLastBoundaryIfNeeds() {
+        if (isSetLast) {
+            return;
+        }
+        try {
+            out.write(("\r\n--" + boundary + "--\r\n").getBytes());
+        } catch (final IOException e) {
+
+        }
+        isSetLast = true;
+    }
+
+    public void addPart(final String key, final String value) {
+        writeFirstBoundaryIfNeeds();
+        try {
+            out.write(("Content-Disposition: form-data; name=\"" + key + "\"\r\n")
+                    .getBytes());
+            out.write("Content-Type: text/plain; charset=UTF-8\r\n".getBytes());
+            out.write("Content-Transfer-Encoding: 8bit\r\n\r\n".getBytes());
+            out.write(value.getBytes());
+            out.write(("\r\n--" + boundary + "\r\n").getBytes());
+        } catch (final IOException e) {
+
+        }
+    }
+
+    public void addPart(final String key, final String fileName,
+                        final InputStream fin) {
+        addPart(key, fileName, fin, "application/octet-stream");
+    }
+
+    public void addPart(final String key, final String fileName,
+                        final InputStream fin, String type) {
+        writeFirstBoundaryIfNeeds();
+        try {
+            type = "Content-Type: " + type + "\r\n";
+            out.write(("Content-Disposition: form-data; name=\"" + key
+                    + "\"; filename=\"" + fileName + "\"\r\n").getBytes());
+            out.write(type.getBytes());
+            out.write("Content-Transfer-Encoding: binary\r\n\r\n".getBytes());
+
+            final byte[] tmp = new byte[4096];
+            int l = 0;
+            while ((l = fin.read(tmp)) != -1) {
+                out.write(tmp, 0, l);
+            }
+            out.flush();
+        } catch (final IOException e) {
+
+        } finally {
+            try {
+                fin.close();
+            } catch (final IOException e) {
+
+            }
+        }
+    }
+
+    public void addPart(final String key, final File value) {
+        try {
+            addPart(key, value.getName(), new FileInputStream(value));
+        } catch (final FileNotFoundException e) {
+
+        }
+    }
+
+    public long getContentLength() {
+        writeLastBoundaryIfNeeds();
+        return out.toByteArray().length;
+    }
+
+    public Header getContentType() {
+        return new BasicHeader("Content-Type", "multipart/form-data; boundary="
+                + boundary);
+    }
+
+    public boolean isChunked() {
+        return false;
+    }
+
+    public boolean isRepeatable() {
+        return false;
+    }
+
+    public boolean isStreaming() {
+        return false;
+    }
+
+    public void writeTo(final OutputStream outstream) throws IOException {
+        outstream.write(out.toByteArray());
+    }
+
+    public Header getContentEncoding() {
+        return null;
+    }
+
+    public void consumeContent() throws IOException,
+            UnsupportedOperationException {
+        if (isStreaming()) {
+            throw new UnsupportedOperationException(
+                    "Streaming entity does not implement #consumeContent()");
+        }
+    }
+
+    public InputStream getContent() throws IOException,
+            UnsupportedOperationException {
+        return new ByteArrayInputStream(out.toByteArray());
+    }
+
 }

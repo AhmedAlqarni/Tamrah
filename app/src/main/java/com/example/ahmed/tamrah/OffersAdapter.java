@@ -33,8 +33,7 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.MyViewHold
 
         }
 
-        public void setDetails(String title, String type, String price, String city,
-                               String rate){
+        public void setDetails(String title, String type, String price, String city){
 //            Log.i("38",type);
             TextView textViewTitle = (TextView) view.findViewById(R.id.OfferTitle);
             TextView textViewType = (TextView)view.findViewById(R.id.TamrahType);
@@ -75,7 +74,6 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.MyViewHold
         holder.type.setText(offer.getType());
         holder.city.setText(offer.getCity());
         holder.price.setText(new DecimalFormat(".##").format(offer.getPrice()) + " S.R.");
-        holder.rate.setText(new DecimalFormat(".##").format(offer.getRate()));
 
     }
 

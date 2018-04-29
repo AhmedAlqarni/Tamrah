@@ -8,19 +8,20 @@ import java.util.Map;
  */
 
 public class Offer implements Serializable{
-    private String Title, Description, Type, mCity, Seller, Price, Rate, OID, OfferImage;
+    private String Title, Description, Type, City, Seller, Price, Rate, OID, OfferImage, Quantity;
 
 
     public Offer() {}
 
-    public Offer(String title, String type, String city, String price, String rate, String mDesc, String oImage) {
+    public Offer(String title, String type, String city, String price, String rate, String mDesc, String oImage, String Quantity) {
         setTitle(title);
         setType(type);
         setCity(city);
         setPrice(price);
-        setRate(rate);
+        rate = "";
         setDescription(mDesc);
         setOfferImage(oImage);
+        setQuantity(Quantity);
 
     }
 
@@ -29,6 +30,14 @@ public class Offer implements Serializable{
 //        Log.i("", mType);
         return Title;
 
+    }
+
+    public String getQuantity() {
+        return Quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        Quantity = quantity;
     }
 
     public String getOID(){
@@ -51,11 +60,11 @@ public class Offer implements Serializable{
     }
 
     public String getCity() {
-        return mCity;
+        return City;
     }
 
     public void setCity(String city) {
-        this.mCity = city;
+        this.City = city;
     }
 
     public String getPrice() {
@@ -63,14 +72,7 @@ public class Offer implements Serializable{
     }
 
     public void setPrice(String price) {
-        this.Price = price;
-    }
-
-    public String getRate() {
-        if(Double.parseDouble(Rate) < 0 )
-            return "N\\A";
-        else
-            return Rate;
+        this.Price = price + " S.R.";
     }
 
     public void setRate(String rate) {
@@ -106,10 +108,12 @@ public class Offer implements Serializable{
         Description = offerValues.get("Description").toString();
         Type = offerValues.get("Type").toString();
         Seller = offerValues.get("Seller").toString();
-        Rate = offerValues.get("Rate").toString();
+        City = offerValues.get("City").toString();
         Type = offerValues.get("Type").toString();
         OfferImage = offerValues.get("OfferImage").toString();
         Price = offerValues.get("Price").toString();
+        OID = offerValues.get("OID").toString();
+        Quantity = offerValues.get("Quantity").toString();
 
     }
 

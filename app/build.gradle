@@ -11,6 +11,17 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
+    useLibrary 'org.apache.http.legacy'
     signingConfigs {
         release {
             storeFile file("/Users/khalidalnamlah/Documents/SWE418/release/SHA/k.keystore.jks ")
@@ -55,7 +66,12 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:11.8.0'
     compile 'com.firebaseui:firebase-ui:0.6.2'
 
-// FirebaseUI for Firebase Realtime Database
+    compile 'com.android.volley:volley:1.1.0'
+
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'org.apache.httpcomponents:httpclient:4.5'
+
+    // FirebaseUI for Firebase Realtime Database
     // implementation 'com.firebaseui:firebase-ui-database:3.2.2'
 
 // FirebaseUI for Cloud Firestore

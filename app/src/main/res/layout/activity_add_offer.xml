@@ -66,8 +66,8 @@
                     android:layout_below="@+id/OfferDiscInput"
                     android:hint="Price"
                     android:inputType="numberDecimal"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="24sp" />
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/OfferTypeInput"
@@ -76,8 +76,19 @@
                     android:layout_alignStart="@+id/OfferDiscInput"
                     android:layout_below="@+id/OfferPriceInput"
                     android:hint="Type"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="24sp" />
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/availableQuantity"
+                    android:inputType = "numberDecimal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/OfferDiscInput"
+                    android:layout_below="@+id/OfferTypeInput"
+                    android:hint="Available Quantity"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/OfferDiscInput"
@@ -131,19 +142,6 @@
                 android:textAllCaps="false"
                 android:textSize="18sp" />
 
-            <Button
-                android:id="@+id/CancelOfferBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/PublishOfferBtn"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:background="@color/dark_orange"
-                android:text="Cancel Offer"
-                android:textAllCaps="false"
-                android:textSize="18sp"></Button>
 
 
         </RelativeLayout>

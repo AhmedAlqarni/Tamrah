@@ -32,6 +32,8 @@ import com.paypal.android.sdk.payments.PaymentConfirmation;
 import org.json.JSONException;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -91,6 +93,7 @@ public class CartActivity extends AppCompatActivity {
                             CartItem toBeAddedToList  = new CartItem(tmp.getKey());
                             toBeAddedToList.setQuantity((String)tmp.child("Quantity").getValue());
                             tmpItemList.add(toBeAddedToList);
+
                         }
                         else
                             break;
@@ -109,7 +112,7 @@ public class CartActivity extends AppCompatActivity {
 
     private void fetchOffer(final List<CartItem> tmpItemList) {
         final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Fetching Cart Items ...");
+        progressDialog.setMessage("Almost There :)");
         progressDialog.show();
         DatabaseReference DBRef;
         for(int i = 0; i < tmpItemList.toArray().length; i++) {
@@ -125,6 +128,12 @@ public class CartActivity extends AppCompatActivity {
                     if((j) == tmpItemList.toArray().length - 1) {
                         progressDialog.dismiss();
                         mAdapter.notifyDataSetChanged();
+                        double total = 0;
+                        for(int i = 0; i < itemList.size(); i++)
+                            total = total + Double.parseDouble(itemList.get(i).getOffer().getPrice()) * Double.parseDouble(itemList.get(i).getQuantity().substring(0,itemList.get(i).getQuantity().length() -4));
+                        TextView totalView = (TextView) findViewById(R.id.CartTotalPrice);
+                        NumberFormat formatter = new DecimalFormat("#0.00");
+                        totalView.setText("Total: " + formatter.format(total) + " S.R.");
                     }
                 }
 
@@ -142,11 +151,12 @@ public class CartActivity extends AppCompatActivity {
 
     public void checkout(View view){
         double total = 0;
-        for (int i = 0; i < itemList.size(); i++){
-            total += Double.parseDouble(itemList.get(i).getOffer().getPrice()) * Double.parseDouble(itemList.get(i).getQuantity());
-        }
-
+        for(int i = 0; i < itemList.size(); i++)
+            total = total + Double.parseDouble(itemList.get(i).getOffer().getPrice()) * Double.parseDouble(itemList.get(i).getQuantity()                .substring(0,itemList.get(i).getQuantity().length() -4));
         total /= 3.75;
+        total = Double.parseDouble(new DecimalFormat("#0.00").format(total));
+
+
 
         Intent serviceConfig = new Intent(this, PayPalService.class);
         serviceConfig.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);

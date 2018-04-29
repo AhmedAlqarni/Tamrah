@@ -54,4 +54,12 @@
         android:textSize="18sp"
         android:onClick="checkout"/>
 
+    <TextView
+        android:id="@+id/CartTotalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_above="@id/EditOffer"
+        android:textSize="18sp"/>
+
 </RelativeLayout>

@@ -149,6 +149,7 @@
     <orderEntry type="library" name="com.google.android.gms:play-services-cast-framework-11.8.0" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-ads-lite-11.8.0" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-games-license-11.8.0" level="project" />
+    <orderEntry type="library" name="commons-codec:commons-codec:1.9@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-ads-lite-license-11.8.0" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-vision-11.8.0" level="project" />
     <orderEntry type="library" scope="TEST" name="javax.annotation:javax.annotation-api:1.2@jar" level="project" />
@@ -172,6 +173,7 @@
     <orderEntry type="library" name="com.android.support:support-annotations:25.4.0@jar" level="project" />
     <orderEntry type="library" name="com.google.firebase:firebase-analytics-11.8.0" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-ads-license-11.8.0" level="project" />
+    <orderEntry type="library" name="commons-logging:commons-logging:1.2@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-games-11.8.0" level="project" />
     <orderEntry type="library" name="com.jakewharton:butterknife-8.8.1" level="project" />
     <orderEntry type="library" name="com.google.firebase:firebase-storage-license-11.8.0" level="project" />
@@ -201,6 +203,7 @@
     <orderEntry type="library" name="com.parse.bolts:bolts-tasks:1.4.0@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-basement-license-11.8.0" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-iid-11.8.0" level="project" />
+    <orderEntry type="library" name="com.android.volley:volley-1.1.0" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-drive-license-11.8.0" level="project" />
     <orderEntry type="library" name="com.android.support:mediarouter-v7-25.2.0" level="project" />
     <orderEntry type="library" name="com.android.support.constraint:constraint-layout-solver:1.0.2@jar" level="project" />
@@ -232,6 +235,7 @@
     <orderEntry type="library" name="com.squareup.okhttp3:okhttp:3.2.0@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-plus-license-11.8.0" level="project" />
     <orderEntry type="library" scope="TEST" name="junit:junit:4.12@jar" level="project" />
+    <orderEntry type="library" name="org.apache.httpcomponents:httpcore:4.4.1@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-cast-11.8.0" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-vision-common-license-11.8.0" level="project" />
     <orderEntry type="library" scope="TEST" name="javax.inject:javax.inject:1@jar" level="project" />
@@ -255,6 +259,7 @@
     <orderEntry type="library" name="com.google.android.gms:play-services-safetynet-11.8.0" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-analytics-license-11.8.0" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-auth-base-11.8.0" level="project" />
+    <orderEntry type="library" name="org.apache.httpcomponents:httpclient:4.5@jar" level="project" />
     <orderEntry type="library" name="com.squareup.okio:okio:1.6.0@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-vision-license-11.8.0" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-location-11.8.0" level="project" />
@@ -267,5 +272,6 @@
     <orderEntry type="library" name="com.google.android.gms:play-services-tagmanager-api-11.8.0" level="project" />
     <orderEntry type="library" name="com.github.bumptech.glide:glide:3.7.0@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-tasks-license-11.8.0" level="project" />
+    <orderEntry type="library" name="org.apache.http.legacy-android-25" level="project" />
   </component>
 </module>

@@ -16,6 +16,7 @@ public class CartItem {
     public CartItem(String quantity, Offer offer) {
         this.quantity = quantity;
         this.offer = offer;
+        this.OID = offer.getOID();
     }
 
     public String getQuantity() {

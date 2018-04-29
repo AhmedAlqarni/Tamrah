@@ -74,7 +74,6 @@ public class SearchResultActivity extends AppCompatActivity {
                 return false;
             }
 
-            //mAdapter = new OffersAdapter(offerList);
 
         });
 
@@ -123,8 +122,8 @@ public class SearchResultActivity extends AppCompatActivity {
 
     public void firebaseOfferSearch(String query){
         recyclerView.setAdapter(null);
-
-        Query firebaseQuerySearch = databaseReference.orderByChild("Type").startAt(query).endAt(query+"\uf8ff");
+        query = query.toLowerCase();
+        Query firebaseQuerySearch = databaseReference.orderByChild("SearchQuery").startAt(query).endAt(query+"\uf8ff");
 
         FirebaseRecyclerAdapter<Offer,MyViewHolder1> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Offer, MyViewHolder1>(
                 Offer.class,
@@ -134,7 +133,7 @@ public class SearchResultActivity extends AppCompatActivity {
             @Override
             protected void populateViewHolder(MyViewHolder1 viewHolder, Offer model, int position) {
                 viewHolder.setDetails(model.getTitle(), model.getType(), model.getPrice(),
-                        model.getCity(), model.getRate(), model.getOfferImage());
+                        model.getCity(), model.getOfferImage(), model.getQuantity());
                 offerList.add(model);
             }
 
@@ -160,7 +159,7 @@ public class SearchResultActivity extends AppCompatActivity {
         }
 
         public void setDetails(String title, String type, String price, String city,
-                               String rate, String imgURL){
+                               String imgURL, String Quantity){
             android.support.v7.widget.AppCompatImageView imgView = (android.support.v7.widget.AppCompatImageView) view.findViewById(R.id.offerImg);
             TextView textViewTitle = (TextView) view.findViewById(R.id.OfferTitle);
             TextView textViewType = (TextView)view.findViewById(R.id.TamrahType);

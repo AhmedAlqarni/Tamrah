@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -53,6 +54,9 @@ public class OfferActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         fetchProfile(offer.getSeller());
+
+        if(MainActivity.user.getUID().equals(""))
+            ((ImageButton) findViewById(R.id.startChat)).setVisibility(View.INVISIBLE);
     }
 
     //BackButton toolbar
@@ -97,7 +101,6 @@ public class OfferActivity extends AppCompatActivity {
         TextView type = (TextView) findViewById(R.id.TamrahTypeOfferPage);
         TextView price = (TextView) findViewById(R.id.Phone);
         TextView desc = (TextView) findViewById(R.id.Description);
-        TextView rate = (TextView) findViewById(R.id.OfferRating);
         ImageView offerImage = (ImageView) findViewById(R.id.Offer_Image);
 
         offerImage.setImageDrawable(LoadImageFromWebOperations(offer.getOfferImage()));
@@ -106,12 +109,6 @@ public class OfferActivity extends AppCompatActivity {
         type.setText(offer.getType());
         price.setText(offer.getPrice() + " S.R.");
         desc.setText(offer.getDescription());
-        if(offer.getRate().equals("-1")) {
-            rate.setText("N\\A");
-            rate.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        }
-        else
-            rate.setText(offer.getRate());
 
         //Seller-specific Context
         ((TextView) findViewById(R.id.OfferTitleOfferPage)).setText(seller.getName());
@@ -124,21 +121,21 @@ public class OfferActivity extends AppCompatActivity {
 
     private void setViewBasedOnUser() {
         if(MainActivity.user.getUID().equals(offer.getSeller())){
-            findViewById(R.id.offerReviewPanel).setVisibility(View.GONE);
-            findViewById(R.id.offerAddReview).setVisibility(View.GONE);
             findViewById(R.id.AddOfferToCart).setVisibility(View.GONE);
             findViewById(R.id.QuantitiyKG).setVisibility(View.GONE);
         }
 
         else{
-            String[] quantityArray = new String[41];
+            String[] quantityArray = new String[(int) Double.parseDouble(offer.getQuantity())*2 + 1];
             quantityArray[0] = "Quantity (in Kilograms)";
-            for (int i = 1; i<quantityArray.length; i++)
-                quantityArray[i] = (float) i / 2 + "";
-            findViewById(R.id.EditOffer).setVisibility(View.GONE);
+            for (int i = 1; i < quantityArray.length; i++)
+                quantityArray[i] = (float) i / 2 + " K.g.";
             ArrayAdapter<String> adp2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, quantityArray);
             adp2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             ((Spinner) findViewById(R.id.QuantitiyKG)).setAdapter(adp2);
+
+            findViewById(R.id.EditOffer).setVisibility(View.GONE);
+
         }
     }
 
@@ -191,6 +188,13 @@ public class OfferActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    public void startChat(View view){
+        Intent intent = new Intent(this, Message_Activity.class);
+        intent.putExtra("SellerUID", seller.getUID());
+        intent.putExtra("CustomerUID", MainActivity.user.getUID());
+        startActivity(intent);
     }
 
 }
