@@ -1,5 +1,24 @@
 package com.example.ahmed.tamrah;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.util.Properties;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Environment;
+
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Environment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -40,6 +59,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 public class CartActivity extends AppCompatActivity {
 
@@ -115,6 +135,7 @@ public class CartActivity extends AppCompatActivity {
 
     private void fetchOffer(final List<CartItem> tmpItemList) {
         final ProgressDialog progressDialog = new ProgressDialog(this);
+        if(tmpItemList.size() == 0) return ;
         progressDialog.setMessage("Almost There :)");
         progressDialog.show();
         DatabaseReference DBRef;
@@ -125,19 +146,19 @@ public class CartActivity extends AppCompatActivity {
             DBRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Offer offer = new Offer();
-                    offer.setValues((Map<String, Object>) dataSnapshot.getValue());
-                    itemList.add(new CartItem(tmpItemList.get(j).getQuantity(), offer));
-                    if((j) == tmpItemList.toArray().length - 1) {
-                        progressDialog.dismiss();
-                        mAdapter.notifyDataSetChanged();
-                        double total = 0;
-                        for(int i = 0; i < itemList.size(); i++)
-                            total = total + Double.parseDouble(itemList.get(i).getOffer().getPrice()) * Double.parseDouble(itemList.get(i).getQuantity().substring(0,itemList.get(i).getQuantity().length() -4));
-                        TextView totalView = (TextView) findViewById(R.id.CartTotalPrice);
-                        NumberFormat formatter = new DecimalFormat("#0.00");
-                        totalView.setText("Total: " + formatter.format(total) + " S.R.");
-                    }
+                        Offer offer = new Offer();
+                        offer.setValues((Map<String, Object>) dataSnapshot.getValue());
+                        itemList.add(new CartItem(tmpItemList.get(j).getQuantity(), offer));
+                        if ((j) == tmpItemList.toArray().length - 1 || (j) == tmpItemList.toArray().length) {
+                            progressDialog.dismiss();
+                            mAdapter.notifyDataSetChanged();
+                            double total = 0;
+                            for (int i = 0; i < itemList.size(); i++)
+                                total = total + Double.parseDouble(itemList.get(i).getOffer().getPrice()) * Double.parseDouble(itemList.get(i).getQuantity().substring(0, itemList.get(i).getQuantity().length() - 4));
+                            TextView totalView = (TextView) findViewById(R.id.CartTotalPrice);
+                            NumberFormat formatter = new DecimalFormat("#0.00");
+                            totalView.setText("Total: " + formatter.format(total) + " S.R.");
+                        }
                 }
 
                 @Override
@@ -185,11 +206,19 @@ public class CartActivity extends AppCompatActivity {
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "ok",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-
+                            final String UID = Auth.fbAuth.getUid();
+                            DatabaseReference DBRef = FirebaseDatabase.getInstance().getReference().child("User")
+                                    .child(UID).child("Cart");
+                            DBRef.setValue(null);
+                            itemList.clear();
+                            mAdapter.notifyDataSetChanged();
                             dialog.dismiss();
+                            TextView total = (TextView) findViewById(R.id.CartTotalPrice);
+                            total.setVisibility(View.GONE);
                         }
                     });
             alertDialog.show();
+            //HERE DELETE
             PaymentConfirmation confirm = data.getParcelableExtra(
                     PaymentActivity.EXTRA_RESULT_CONFIRMATION);
             if (confirm != null){
@@ -209,7 +238,6 @@ public class CartActivity extends AppCompatActivity {
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "ok",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            //FirebaseAuth.getInstance().signOut();
                             dialog.dismiss();
                         }
                     });

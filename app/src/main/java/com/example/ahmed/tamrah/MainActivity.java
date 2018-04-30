@@ -405,7 +405,39 @@ public class MainActivity extends AppCompatActivity {
             //for the Camera App>>>
             if (resultCode == RESULT_OK) {
                 Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-                new ImageUploader().sendRequest(imageBitmap, this);
+                final String AI_type  = new ImageUploader().sendRequest(imageBitmap, this);
+                final Context c = this;
+                AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+                alertDialog.setTitle("Type");
+                alertDialog.setMessage("The Type is: " + AI_type);
+
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+                        new DialogInterface.OnClickListener() {
+                            //firebase logout
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "View Information",
+                        new DialogInterface.OnClickListener() {
+                            //firebase logout
+                            public void onClick(DialogInterface dialog, int which) {
+                                //GO TO INFO PAGE
+                                dialog.dismiss();
+
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Search Offers",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                Intent intent = new Intent(c, SearchResultActivity.class);
+                                intent.putExtra("text", AI_type);
+                                startActivity(intent);
+                            }
+                        });
+                alertDialog.show();
             }
         }
     }
@@ -459,30 +491,12 @@ Log.i("i", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
             HttpResponse response = client.execute(post);
             HttpEntity resEntity = response.getEntity();
-            try {
 
+            try {
                 final String response_str = EntityUtils.toString(resEntity);
                 if (resEntity != null) {
                     Log.i("RESPONSE", response_str);
-                    AlertDialog alertDialog = new AlertDialog.Builder(c).create();
-                    alertDialog.setTitle("Type");
-                    alertDialog.setMessage("The Type is: " + response_str);
-
-                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "ok",
-                            new DialogInterface.OnClickListener() {
-                                //firebase logout
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-
-                                }
-                            });
-                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "View Offers",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    alertDialog.show();
+                    return response_str;
                 }
             } catch (Exception ex) {
                 Log.e("Debug", "error: " + ex.getMessage(), ex);
