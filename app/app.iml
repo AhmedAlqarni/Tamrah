@@ -271,7 +271,7 @@
     <orderEntry type="library" name="com.google.android.gms:play-services-tagmanager-api-11.8.0" level="project" />
     <orderEntry type="library" name="com.github.bumptech.glide:glide:3.7.0@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-tasks-license-11.8.0" level="project" />
-    <orderEntry type="library" name="org.apache.http.legacy-android-25" level="project" />
     <orderEntry type="library" name="android-android-25" level="project" />
+    <orderEntry type="library" name="org.apache.http.legacy-android-25" level="project" />
   </component>
 </module>

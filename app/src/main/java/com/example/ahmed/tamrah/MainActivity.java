@@ -412,6 +412,8 @@ public class MainActivity extends AppCompatActivity {
 //            }
             //for the Camera App>>>
             if (resultCode == RESULT_OK) {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
                 Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
                 final String AI_type  = new ImageUploader().sendRequest(imageBitmap, this);
                 final Context c = this;
@@ -489,7 +491,7 @@ Log.i("i", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
             HttpClient client = new DefaultHttpClient();
             //use your server path of php file
-            HttpPost post = new HttpPost("http://10.13.19.244:5000/upload");
+            HttpPost post = new HttpPost("http://10.13.12.50:5000/upload");
 
             MultipartEntity reqEntity = new MultipartEntity();
             reqEntity.addPart("file","whatev",new ByteArrayInputStream(encodedImage.getBytes(StandardCharsets.UTF_8))
